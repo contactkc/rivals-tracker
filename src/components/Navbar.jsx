@@ -20,63 +20,42 @@ function Navbar() {
   };
 
   return (
-    <Box bg="whiteAlpha.50" color="white" p={4} as="nav" rounded="xl" borderColor="border.disabled">
+    <Box color="white" as="nav" rounded="xl">
       <Flex justify="space-between" align="center" maxW="1200px" mx="auto">
-        {/* search bar */}
-        <form onSubmit={handleSearch}>
+        {/* title */}
           <Flex>
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search player..."
-              bg="gray.800"
-              border="none"
-              rounded="md"
-              _focus={{ boxShadow: 'none', bg: 'gray.800'}}
-              w="200px"
-            />
-            <Button
-              type="submit"
-              bg="white.600"
-              color="black"
-              rounded="md"
-              ml={2}
-              _hover={{ bg: 'white.700' }}
-            >
-              Search
-            </Button>
+            <Link textStyle="lg" fontWeight="bold" href="/" _hover={{ textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>Rivals Tracker</Link>
           </Flex>
-        </form>
 
         {/* nav links */}
         <Flex gap={6}>
-          <Link href="/" color="white" fontSize="lg" _hover={{ color: 'blue.400' }}>
+          <Link href="/" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
             Home
           </Link>
-          <Link href="/heroes" color="white" fontSize="lg" _hover={{ color: 'blue.400' }}>
+          <Link href="/" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
             Heroes
           </Link>
         </Flex>
 
         {/* auth links */}
         <Flex align="center" gap={4}>
-          <Link href="../pages/login" color="white" fontSize="lg" _hover={{ color: 'blue.400' }}>
+          <Link href="/login" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
             Login
           </Link>
           <Link
             href="/signup"
-            as={Button}
-            bg="white.600"
+            bg="white"
             color="black"
-            rounded="md"
+            rounded="3xl"
             px={4}
             py={2}
             border="1px"
-            borderColor="white.500"
-            boxShadow="0 0 8px rgba(226, 205, 205, 0.6)"
-            _hover={{ bg: 'white.700' }}
+            fontSize="sm"
+            borderColor="gray.500"
+            boxShadow="0 0 16px rgba(226, 205, 205, 0.8)"
+            _focus={{ outline: 'none', boxShadow: 'none' }}
           >
-            Signup
+            Sign up
           </Link>
         </Flex>
       </Flex>
