@@ -1,0 +1,9 @@
+spring.application.name=backend
+spring.security.enabled=false
+spring.datasource.url=jdbc:postgresql://localhost:5432/marvelrivalsdb
+spring.datasource.username=postgres
+spring.datasource.password=passwordhere
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+rivals.api.key=${RIVALS_API_KEY}
