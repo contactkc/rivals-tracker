@@ -20,7 +20,7 @@ function Navbar() {
   };
 
   return (
-    <Box color="white" as="nav" rounded="xl">
+    <Box as="nav">
       <Flex justify="space-between" align="center" maxW="1200px" mx="auto">
         {/* title */}
           <Flex>
