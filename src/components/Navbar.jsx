@@ -28,12 +28,18 @@ function Navbar() {
           </Flex>
 
         {/* nav links */}
-        <Flex gap={6}>
+        <Flex gap={12}>
           <Link href="/" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
             Home
           </Link>
-          <Link href="/" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
+          <Link href="/heroes" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
             Heroes
+          </Link>
+          <Link href="/maps" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
+            Maps
+          </Link>
+          <Link href="/patches" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
+            Patch Notes
           </Link>
         </Flex>
 
