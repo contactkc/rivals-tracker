@@ -1,0 +1,31 @@
+import { Box, Card, Image, HStack, Badge, Text } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+
+function MapCard({ map }) {
+    return(
+        <Card.Root variant="outline" key={map.name} overflow="hidden" maxW="sm">
+                <Image
+                    objectFit="cover"
+                    src={map.imageUrl}
+                    alt={map.alt}
+                />
+                <Box>
+                    <Card.Body>
+                        <Card.Title>{map.name}</Card.Title>
+                        <Text color="gray.300" textStyle="sm" mb="2" fontStyle="italic">
+                            {map.location}
+                        </Text>
+                        <Card.Description>
+                            {map.description}
+                        </Card.Description>
+                        <HStack mt="2">
+                            <Badge>Game-Mode: {map.gameMode}</Badge>
+                        </HStack>
+                        <Text as="a" href={map.video} color="gray.300" fontStyle="italic" textStyle="sm" mt="4" target="_blank">Map Preview</Text>
+                    </Card.Body>
+                </Box>
+        </Card.Root>
+    );
+}
+
+export default MapCard;
