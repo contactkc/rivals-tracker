@@ -7,7 +7,7 @@ function Maps() {
   const { maps, loading, error } = useMaps();
 
   return (
-    <Box color="white" minH="100vh">
+    <Box color="white">
       <Navbar />
       <Text fontSize="4rem" fontWeight="800" textAlign="center">Maps</Text>
       <Center>

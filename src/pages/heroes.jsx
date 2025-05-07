@@ -7,7 +7,7 @@ function Heroes() {
     const { heroes, loading, error } = useHeroes();
 
     return (
-        <Box color="white" minH="100vh">
+        <Box color="white">
             <Navbar />
             <Text fontSize="4rem" fontWeight="800">Heroes</Text>
             <Center>

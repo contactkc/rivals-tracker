@@ -1,5 +1,4 @@
 import { Box, Card, Image, HStack, Badge, Text } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
 
 function MapCard({ map }) {
     return(
