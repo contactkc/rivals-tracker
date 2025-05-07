@@ -37,7 +37,10 @@ function useMaps() {
             name: map.name,
             location: map.location,
             description: map.description || 'No description provided...',
-            gameMode: map.game_mode,
+            gameMode: map.game_mode
+              .split(' ')
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' '),
             video: map.video,
             imageUrl,
             alt: map.name,

@@ -66,7 +66,6 @@ function Login() {
                     marginTop={2}
                     rounded="2xl"
                     w="full"
-                    boxShadow="0 0 12px rgba(226, 205, 205, 0.8)"
                 >
                     Sign in
                 </Button>

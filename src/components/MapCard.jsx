@@ -21,7 +21,7 @@ function MapCard({ map }) {
                         <HStack mt="2">
                             <Badge>Game-Mode: {map.gameMode}</Badge>
                         </HStack>
-                        <Text as="a" href={map.video} color="gray.300" fontStyle="italic" textStyle="sm" mt="4" target="_blank">Map Preview</Text>
+                        <Text as="a" href={map.video} color="gray.300" fontStyle="italic" textStyle="xs" mt="4" target="_blank" rel="noopener noreferrer" textDecoration="underline">Map Preview</Text>
                     </Card.Body>
                 </Box>
         </Card.Root>
