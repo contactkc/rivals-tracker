@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
-import { Box, Flex, VStack, AbsoluteCenter, Input, Button, Text } from '@chakra-ui/react';
+import { Box, Flex, VStack, AbsoluteCenter, Input, Button, Text, Alert } from '@chakra-ui/react';
 import Navbar from './components/Navbar';
 import useApi from './hooks/useApi';
 import './App.css';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [apiQuery, setApiQuery] = useState(''); // new state for triggering API call
   const { data: searchResult, loading, error } = useApi(
-    searchQuery ? `player/${searchQuery}` : null
+    apiQuery ? `player/${apiQuery}` : null // use apiQuery for API call
   );
 
   const handleSearch = (e) => {
     e.preventDefault();
+    setApiQuery(searchQuery); // trigger API call by setting apiQuery
   };
 
   return (
@@ -23,7 +25,7 @@ function App() {
           <Box className="flex flex-col md:flex-row p-8 max-w-7xl mx-auto">
             {/* title & search */}
             <Box className="md:w-1/2 flex flex-col items-center md:items-start">
-            <h1 class="login__title">Marvel Rivals Tracker</h1>
+              <h1 className="login__title">Marvel Rivals Tracker</h1>
               <form onSubmit={handleSearch}>
                 <Flex maxW="md" w="full">
                   <Input
@@ -54,9 +56,10 @@ function App() {
                 </Text>
               )}
               {error && (
-                <Box mt={4} p={4} bg="gray.800" rounded="md" color="red.400">
-                  Error: {error}
-                </Box>
+                <Alert.Root status="error" mt="4" rounded="2xl">
+                  <Alert.Indicator />
+                  <Alert.Title>Error! {error}</Alert.Title>
+                </Alert.Root>
               )}
               {searchResult && !loading && !error && (
                 <Box mt={4} p={4} bg="gray.800" rounded="md">
