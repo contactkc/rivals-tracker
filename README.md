@@ -5,8 +5,31 @@ This project aims to develop a website that collects, processes, and visualizes 
 
 **Client:** Vite.js, React
 
+**Frontend:** ChakraUI
+
 **Backend:** Java, Maven, Spring Boot, PostgreSQL
 
+**API:** [MarvelRivalsAPI](https://marvelrivalsapi.com/)
+
+## How to Use:
+
+1. Clone the repository:
+```
+git clone https://github.com/contactkc/rivals-tracker.git
+```
+2. Navigate to the project directory:
+```
+cd rivals-tracker
+```
+3. Install npm dependencies
+```
+npm install
+```
+4. Make your environmental file (.env)
+```
+Add your key inside the env in this format:
+VITE_MARVEL_RIVALS_API_KEY=YOUR_API_KEY
+```
 
 # React + Vite
 
