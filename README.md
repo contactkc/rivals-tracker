@@ -1,14 +1,12 @@
 # Rivals Tracker
+Track your Marvel Rivals stats or anyone you want with their username! This project aims to develop a website that collects, processes, and visualizes player data from a video game. The system will leverage Object-Oriented Programming (OOP) principles to ensure modularity, reusability, and maintainability. The program will support user authentication (if needed), data retrieval from APIs or databases, data processing, and interactive visual representation of player statistics. The goal is to provide an intuitive and insightful way to analyze player performance, trends, and achievements.
 
 ## Team Members
 Benjamin Nguyen, Kenneth Chau, Alexander Leang
 
-## Project Description
-This project aims to develop a website that collects, processes, and visualizes player data from a video game. The system will leverage Object-Oriented Programming (OOP) principles to ensure modularity, reusability, and maintainability. The program will support user authentication (if needed), data retrieval from APIs or databases, data processing, and interactive visual representation of player statistics. The goal is to provide an intuitive and insightful way to analyze player performance, trends, and achievements.
-
 ## Techstack
 
-**Client:** Vite.js, React
+**Client:** React, Vite
 
 **Frontend:** ChakraUI
 
@@ -36,15 +34,13 @@ Add your key inside the env in this format:
 VITE_MARVEL_RIVALS_API_KEY=YOUR_API_KEY
 ```
 
-# React + Vite
+## Features Implemented
+- Minimalistic Front End website
+- Check out all available heroes with their roles and level of difficulty
+- Check out all the maps the game has to offer, as well as video links to them
+- Want to know whats new in the latest update? Check out the Patches page
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Future Work
+- Finish user authentication implementation so login/signup page works
+- Finish player search so users can search up any player's stats with a username
+- Move API hooks from front end to proxy calls in back end?
