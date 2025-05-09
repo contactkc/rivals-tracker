@@ -1,8 +1,16 @@
 # Rivals Tracker
 Track your Marvel Rivals stats or anyone you want with their username! This project aims to develop a website that collects, processes, and visualizes player data from a video game. The system will leverage Object-Oriented Programming (OOP) principles to ensure modularity, reusability, and maintainability. The program will support user authentication (if needed), data retrieval from APIs or databases, data processing, and interactive visual representation of player statistics. The goal is to provide an intuitive and insightful way to analyze player performance, trends, and achievements.
 
-## Team Members
-Benjamin Nguyen, Kenneth Chau, Alexander Leang
+## Team Members & Roles
+
+- Benjamin Nguyen
+  - Add work here
+
+- Kenneth Chau
+  - Add work here
+  
+- Alexander Leang
+  - Backend: Database, API
 
 ## Techstack
 
