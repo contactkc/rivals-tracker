@@ -7,7 +7,8 @@ Track your Marvel Rivals stats or anyone you want with their username! This proj
   - Add work here
 
 - Kenneth Chau
-  - Add work here
+  - Frontend: UI, Components, Hooks
+  - Backend: CORS, API, Database
   
 - Alexander Leang
   - Backend: Database, API
