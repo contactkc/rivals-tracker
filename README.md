@@ -44,3 +44,4 @@ VITE_MARVEL_RIVALS_API_KEY=YOUR_API_KEY
 - Finish user authentication implementation so login/signup page works
 - Finish player search so users can search up any player's stats with a username
 - Move API hooks from front end to proxy calls in back end?
+- Make a player stats page for API to populate which the home page will redirect users after entering username
