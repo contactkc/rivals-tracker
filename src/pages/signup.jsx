@@ -13,14 +13,15 @@ function Signup() {
       e.preventDefault();
       setError(null);
       try {
-        const response = await fetch('http://localhost:8080/signup', {
+        const response = await fetch('http://localhost:8080/api/auth/signup', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
           },
-          body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+          body: JSON.stringify({ username, password }),
           credentials: 'include',
         });
+        
         if (response.ok) {
           navigate('/login');
         } else {

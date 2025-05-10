@@ -59,8 +59,8 @@ function App() {
                 </Flex>
               </form>
               {loading && (
-                <Text mt={4} color="blue.400">
-                  Loading...
+                <Text mt={4} color="white">
+                  Searching for player...
                 </Text>
               )}
               {error && (

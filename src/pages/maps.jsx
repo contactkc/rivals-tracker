@@ -9,7 +9,7 @@ function Maps() {
   return (
     <Box color="white">
       <Navbar />
-      <Text fontSize="4rem" fontWeight="800" textAlign="center">Maps</Text>
+      <Text fontSize="2rem" fontWeight="800" textAlign="center">Maps</Text>
       <Center>
         <VStack spacing={8} mx="auto" mt="8" w="full" maxW="5xl">
           <AbsoluteCenter>

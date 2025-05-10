@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Box,
   Flex,
@@ -7,17 +6,11 @@ import {
   Text,
   Link,
 } from '@chakra-ui/react';
-import useApi from '../hooks/useApi';
+import { useUser } from '../context/UserContext';
+import { FaCaretDown } from "react-icons/fa";
 
 function Navbar() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const { data: searchResult, loading, error } = useApi(
-    searchQuery ? `player/${searchQuery}` : null
-  );
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-  };
+  const { user, logout } = useUser();
 
   return (
     <Box as="nav">
@@ -45,60 +38,37 @@ function Navbar() {
 
         {/* auth links */}
         <Flex align="center" gap={4}>
-          <Link href="/login" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
-            Login
-          </Link>
-          <Link
-            href="/signup"
-            bg="white"
-            color="black"
-            rounded="3xl"
-            px={4}
-            py={2}
-            border="1px"
-            fontSize="sm"
-            borderColor="gray.500"
-            boxShadow="0 0 16px rgba(226, 205, 205, 0.8)"
-            _focus={{ outline: 'none', boxShadow: 'none' }}
-          >
-            Sign up
-          </Link>
+          {user ? (
+            <>
+              <Text fontSize="sm" color="white">Welcome, <Link href='/profile'>{user.username}!<FaCaretDown /></Link></Text>
+              <Button onClick={logout} size="sm" variant="outline">
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link href="/login" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
+                Login
+              </Link>
+              <Link
+                href="/signup"
+                bg="white"
+                color="black"
+                rounded="3xl"
+                px={4}
+                py={2}
+                border="1px"
+                fontSize="sm"
+                borderColor="gray.500"
+                boxShadow="0 0 16px rgba(226, 205, 205, 0.8)"
+                _focus={{ outline: 'none', boxShadow: 'none' }}
+              >
+                Sign up
+              </Link>
+            </>
+          )}
         </Flex>
       </Flex>
-
-      {/* search result */}
-      {loading && (
-        <Box position="absolute" top={16} left={4} color="blue.400">
-          Loading...
-        </Box>
-      )}
-      {error && (
-        <Box
-          position="absolute"
-          top={16}
-          left={4}
-          bg="gray.800"
-          p={4}
-          rounded="md"
-          color="red.400"
-        >
-          Error: {error}
-        </Box>
-      )}
-      {searchResult && !loading && !error && (
-        <Box
-          position="absolute"
-          top={16}
-          left={4}
-          bg="gray.800"
-          p={4}
-          rounded="md"
-        >
-          <Text>
-            Found: {searchResult.username} (Rank: {searchResult.rank || 'N/A'})
-          </Text>
-        </Box>
-      )}
     </Box>
   );
 }

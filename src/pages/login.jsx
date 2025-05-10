@@ -2,29 +2,37 @@ import { useState } from 'react';
 import { Box, Link, Heading, Input, Button, Text, VStack, AbsoluteCenter } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { useUser } from '../context/UserContext';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { login: contextLogin } = useUser();  // get the login function from context
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     try {
-      const response = await fetch('http://localhost:8080/login', {
+      const response = await fetch('http://localhost:8080/api/auth/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
-        body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+        body: JSON.stringify({ username, password }),
         credentials: 'include',
       });
+      
       if (response.ok) {
+        const userData = await response.json();
+        // update both localStorage & context
+        localStorage.setItem('user', JSON.stringify(userData));
+        contextLogin(userData);
         navigate('/');
       } else {
-        setError('Invalid username or password');
+        const errorText = await response.text();
+        setError(errorText || 'Invalid username or password');
       }
     } catch (err) {
       setError('Login failed: ' + err.message);
