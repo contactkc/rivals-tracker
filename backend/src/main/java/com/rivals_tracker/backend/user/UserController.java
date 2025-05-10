@@ -43,17 +43,17 @@ public class UserController {
         }
     }
 
-    // Optional: Endpoint to get user details (excluding sensitive info)
+    // endpoint to get user details (exclude sensitive info)
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable UUID userId) {
-         Optional<User> userOptional = userService.findById(userId);
-
-         if (userOptional.isPresent()) {
-             User user = userOptional.get();
-             // In a real app, map this to a UserResponse DTO to exclude the password
-             return new ResponseEntity<>(user, HttpStatus.OK);
-         } else {
-             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-         }
+        Optional<User> userOptional = userService.findById(userId);
+        
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setPassword(null);
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
     }
 }

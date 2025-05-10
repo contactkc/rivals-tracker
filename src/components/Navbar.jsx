@@ -40,7 +40,9 @@ function Navbar() {
         <Flex align="center" gap={4}>
           {user ? (
             <>
-              <Text fontSize="sm" color="white">Welcome, <Link href='/profile'>{user.username}!<FaCaretDown /></Link></Text>
+              <Text fontSize="sm" color="white">
+                Welcome, <Link href={`/profile/${user.id}`}>{user.username} <FaCaretDown /></Link>
+              </Text>
               <Button onClick={logout} size="sm" variant="outline">
                 Logout
               </Button>

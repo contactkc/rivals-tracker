@@ -1,43 +1,55 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams, Navigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import Navbar from '@/components/Navbar';
-import { Box, VStack, Center, Text, AbsoluteCenter, Spinner, Timeline } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 
 function Profile() {
+  const { userId } = useParams();
   const { user, login } = useUser();
-  const [marvelUsername, setMarvelUsername] = useState(user?.marvelRivalsUsername || '');
+  const [profileData, setProfileData] = useState(null);
+  const [marvelUsername, setMarvelUsername] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch(`http://localhost:8080/api/users/${user.id}/marvel-username`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ marvelRivalsUsername: marvelUsername }),
-        credentials: 'include',
-      });
-      
-      if (response.ok) {
-        const updatedUser = await response.json();
-        login(updatedUser);
+  // redirect if not the current user
+  if (user && userId !== user.id) {
+    return <Navigate to={`/profile/${user.id}`} replace />;
+  }
+  
+  useEffect(() => {
+    // fetch profile data
+    const fetchProfileData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
+          credentials: 'include'
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to load profile');
+        }
+        
+        const data = await response.json();
+        setProfileData(data);
+        setMarvelUsername(data.marvelRivalsUsername || '');
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error(err);
+    };
+    
+    if (userId) {
+      fetchProfileData();
     }
-  };
-    return (
-        <Box color="white">
-          <Navbar />
-          <Text fontSize="2rem" fontWeight="800" textAlign="center">Profile Settings</Text>
-          <Center>
-            <VStack spacing={8} mx="auto" mt="8" w="full" maxW="5xl">
-              
-            </VStack>
-          </Center>
-        </Box>
-    );
+  }, [userId]);
+
+  return (
+    <Box color="white">
+      <Navbar />
+      <Text fontSize="2rem" fontWeight="800" textAlign="center">Profile Settings</Text>
+    </Box>
+  );
 }
 
 export default Profile;
