@@ -45,14 +45,15 @@ function Player() {
   return (
     <Box color="white">
         <Navbar />
-        <Card.Root>
+        <Card.Root mt={6} maxW="250px">
             <Card.Body>
-                <VStack mb="6" gap="3">
+                <VStack>
                     <Avatar.Root size="2xl">
                         <Avatar.Image src={`http://marvelrivalsapi.com/rivals${data.player.icon.player_icon}`} alt="Player Icon" />
                         <Avatar.Fallback name={data.player.name} />
                     </Avatar.Root>
                     <Text fontSize="2xl" fontWeight="bold">{data.player.name}</Text>
+                    <Text fontSize="xs" fontStyle="italic" color="gray.400">UID: {data.player.uid}</Text>
                     <Text fontSize="lg" color="gray.400">Level: {data.player.level}</Text>
                 </VStack>
             </Card.Body>
