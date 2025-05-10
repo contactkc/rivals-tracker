@@ -12,12 +12,14 @@ function Maps() {
       <Text fontSize="2rem" fontWeight="800" textAlign="center">Maps</Text>
       <Center>
         <VStack spacing={8} mx="auto" mt="8" w="full" maxW="5xl">
-          <AbsoluteCenter>
-            <VStack>
-              <Spinner size="md" />
-              {loading && <Text color="white">Loading maps...</Text>}
-            </VStack>
-          </AbsoluteCenter>
+          {loading && (
+            <AbsoluteCenter>
+              <VStack>
+                <Spinner size="md" />
+                <Text color="white">Loading maps...</Text>
+              </VStack>
+            </AbsoluteCenter>
+          )}
           {error && <Text color="red.400">Error: {error}</Text>}
           {!loading && !error && maps.length === 0 && (
             <Text color="gray.400">No maps found.</Text>
