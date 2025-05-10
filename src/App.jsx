@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     if (searchResult && !loading && !error) {
-      navigate(`/player/${searchResult.username}`);
+      navigate(`/player/${searchResult.name || searchResult.player?.name}`);
     }
   }, [searchResult, loading, error, navigate]);
 

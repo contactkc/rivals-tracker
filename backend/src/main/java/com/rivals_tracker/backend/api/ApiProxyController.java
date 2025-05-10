@@ -1,5 +1,6 @@
 package com.rivals_tracker.backend.api;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,6 +18,7 @@ public class ApiProxyController {
     private final RestTemplate restTemplate = new RestTemplate();
     private static final String API_BASE_URL = "https://marvelrivalsapi.com/api/v1/";
 
+    @Value("${rivals.api.key}")
     private String apiKey;
     
     private HttpEntity<String> createRequestEntity() {
