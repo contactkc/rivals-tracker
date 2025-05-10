@@ -17,7 +17,7 @@ public class ApiProxyController {
     private final RestTemplate restTemplate = new RestTemplate();
     private static final String API_BASE_URL = "https://marvelrivalsapi.com/api/v1/";
 
-    private String apiKey = "2e9b8e476c6672ac504e598ffcf67895eed3ec98be7ffdd408e931a0442bde72";
+    private String apiKey;
     
     private HttpEntity<String> createRequestEntity() {
         HttpHeaders headers = new HttpHeaders();
@@ -32,7 +32,6 @@ public class ApiProxyController {
             ResponseEntity<String> response = restTemplate.exchange(
                 url, HttpMethod.GET, createRequestEntity(), String.class
             );
-            // Just return the raw JSON string
             return ResponseEntity.ok().body(response.getBody());
         } catch (Exception e) {
             e.printStackTrace();

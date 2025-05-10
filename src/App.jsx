@@ -69,13 +69,6 @@ function App() {
                   <Alert.Title>Error! {error}</Alert.Title>
                 </Alert.Root>
               )}
-              {searchResult && !loading && !error && (
-                <Box mt={4} p={4} bg="gray.800" rounded="md">
-                  <Text>
-                    Found: {searchResult.username} (Rank: {searchResult.rank || 'N/A'})
-                  </Text>
-                </Box>
-              )}
             </Box>
           </Box>
         </VStack>
