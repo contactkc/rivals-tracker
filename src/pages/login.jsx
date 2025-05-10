@@ -9,7 +9,7 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { login: contextLogin } = useUser();  // get the login function from context
+  const { login: contextLogin } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,14 +21,21 @@ function Login() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
-        credentials: 'include',
       });
       
       if (response.ok) {
         const userData = await response.json();
-        // update both localStorage & context
-        localStorage.setItem('user', JSON.stringify(userData));
-        contextLogin(userData);
+        // Store token instead of whole user object
+        localStorage.setItem('token', userData.token);
+        // Store user data
+        const userDataToStore = {
+          id: userData.id,
+          username: userData.username,
+          marvelRivalsUsername: userData.marvelRivalsUsername
+        };
+        localStorage.setItem('user', JSON.stringify(userDataToStore));
+        
+        contextLogin(userDataToStore);
         navigate('/');
       } else {
         const errorText = await response.text();

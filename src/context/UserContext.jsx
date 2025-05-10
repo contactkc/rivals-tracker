@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useContext } from 'react';
+import { fetchWithAuth } from '../utils/api';
 
 const UserContext = createContext(null);
 
@@ -7,7 +8,7 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // checks localStorage for existing user on app load
+    // check localStorage for existing user on app load
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -20,9 +21,11 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem('user', JSON.stringify(userData));
   };
 
-  const logout = () => {
-    setUser(null);
+  const logout = async () => {
+    // clear all authentication data
+    localStorage.removeItem('token');
     localStorage.removeItem('user');
+    setUser(null);
   };
 
   return (

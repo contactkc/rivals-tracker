@@ -21,7 +21,13 @@ function Profile() {
     // fetch profile data
     const fetchProfileData = async () => {
       try {
+        // grab token from localStorage
+        const token = localStorage.getItem('token');
+        
         const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
+          headers: {
+            'Authorization': token ? `Bearer ${token}` : ''
+          },
           credentials: 'include'
         });
         

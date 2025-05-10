@@ -50,7 +50,7 @@ public class User {
 
     // --- Setters ---
     // Note: Typically you wouldn't have a setter for the auto-generated ID
-    // public void setId(UUID id) { this.id = id; } // Avoid this setter for generated IDs
+    public void setId(UUID id) { this.id = id; } // Avoid this setter for generated IDs
 
     public void setUsername(String username) {
         this.username = username;
