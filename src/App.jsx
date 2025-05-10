@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Box, Flex, VStack, AbsoluteCenter, Input, Button, Text, Alert } from '@chakra-ui/react';
 import Navbar from './components/Navbar';
 import useApi from './hooks/useApi';
+import { useNavigate } from 'react-router-dom';
 import './App.css';
 
 function App() {
@@ -10,6 +11,13 @@ function App() {
   const { data: searchResult, loading, error } = useApi(
     apiQuery ? `player/${apiQuery}` : null // use apiQuery for API call
   );
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (searchResult && !loading && !error) {
+      navigate(`/player/${searchResult.username}`);
+    }
+  }, [searchResult, loading, error, navigate]);
 
   const handleSearch = (e) => {
     e.preventDefault();

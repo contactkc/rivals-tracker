@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/proxy")
@@ -34,7 +36,9 @@ public class ApiProxyController {
             ResponseEntity<String> response = restTemplate.exchange(
                 url, HttpMethod.GET, createRequestEntity(), String.class
             );
-            return ResponseEntity.ok(response.getBody());
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> json = mapper.readValue(response.getBody(), Map.class);
+            return ResponseEntity.ok(json);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
