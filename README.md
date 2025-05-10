@@ -8,7 +8,7 @@ Track your Marvel Rivals stats or anyone you want with their username! This proj
 
 - Kenneth Chau
   - Frontend: UI, Components, Hooks
-  - Backend: CORS, API, Database
+  - Backend: CORS, API, Database, User Auth
   
 - Alexander Leang
   - Backend: Database, API
@@ -48,13 +48,12 @@ VITE_MARVEL_RIVALS_API_KEY=YOUR_API_KEY
 - Check out all available heroes with their roles and level of difficulty
 - Check out all the maps the game has to offer, as well as video links to them
 - Want to know whats new in the latest update? Check out the Patches page
+- User authentication implementation so login/signup page works with protected profile page
+- Player search so users can search up any player's stats with a username
 
 ## Future Work
-- Finish user authentication implementation so login/signup page works
-- Finish player search so users can search up any player's stats with a username
 - Move API hooks from front end to proxy calls in back end?
-- Make a player stats page for API to populate which the home page will redirect users after entering username
+- Add graphs to showcase user a visually represented data
+- Finish player statistic page
 
 ## Known Issues
-- Player API fetch isn't working
-- No sign up or login working
