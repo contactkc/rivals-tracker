@@ -1,6 +1,5 @@
-package com.rivals_tracker.backend;
+package com.rivals_tracker.backend.api;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/proxy")
@@ -20,9 +17,8 @@ public class ApiProxyController {
     private final RestTemplate restTemplate = new RestTemplate();
     private static final String API_BASE_URL = "https://marvelrivalsapi.com/api/v1/";
 
-    @Value("${rivals.api.key}")
-    private String apiKey;
-
+    private String apiKey = "2e9b8e476c6672ac504e598ffcf67895eed3ec98be7ffdd408e931a0442bde72";
+    
     private HttpEntity<String> createRequestEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("x-api-key", apiKey);
@@ -36,10 +32,10 @@ public class ApiProxyController {
             ResponseEntity<String> response = restTemplate.exchange(
                 url, HttpMethod.GET, createRequestEntity(), String.class
             );
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> json = mapper.readValue(response.getBody(), Map.class);
-            return ResponseEntity.ok(json);
+            // Just return the raw JSON string
+            return ResponseEntity.ok().body(response.getBody());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
