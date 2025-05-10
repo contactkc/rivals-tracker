@@ -49,6 +49,7 @@ VITE_MARVEL_RIVALS_API_KEY=YOUR_API_KEY
 - Check out all the maps the game has to offer, as well as video links to them
 - Want to know whats new in the latest update? Check out the Patches page
 - User authentication implementation so login/signup page works with protected profile page
+- BCrypt encrypted passwords
 - Player search so users can search up any player's stats with a username
 
 ## Future Work
