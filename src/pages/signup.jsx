@@ -94,7 +94,6 @@ function Signup() {
                     <form onSubmit={handleSubmit}>
                         <VStack spacing={4}>
                             <Field.Root invalid={!!formErrors.username}>
-                                <Field.Label>Username</Field.Label>
                                 <Input
                                     placeholder="Username"
                                     value={username}
@@ -108,7 +107,6 @@ function Signup() {
                             </Field.Root>
                             
                             <Field.Root invalid={!!formErrors.password}>
-                                <Field.Label>Password</Field.Label>
                                 <Input
                                     type="password"
                                     placeholder="Password"

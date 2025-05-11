@@ -65,7 +65,7 @@ function Login() {
         <Navbar />
         <AbsoluteCenter>
             <VStack spacing={8} maxW="400px" mx="auto">
-            <h1 className="text-4xl font-bold">Login in to Rivals Tracker</h1>
+            <h1 className="text-4xl font-bold">Login to Rivals Tracker</h1>
             <form onSubmit={handleSubmit}>
                 <VStack spacing={4}>
                 <Input
