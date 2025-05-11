@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service // Marks this as a Spring service component
 public class AuthService {
@@ -40,7 +41,10 @@ public class AuthService {
             User user = userOptional.get();
             // compare user input password with stored hash
             if (passwordEncoder.matches(password, user.getPassword())) {
-                return userOptional; // successful
+                // update last login time
+                user.setLastLogin(LocalDateTime.now());
+                userRepository.save(user);
+                return Optional.of(user); // return the updated user
             }
         }
         return Optional.empty(); // failed (user not found or password incorrect)

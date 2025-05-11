@@ -32,11 +32,12 @@ function Login() {
         const userDataToStore = {
           id: userData.id,
           username: userData.username,
-          marvelRivalsUsername: userData.marvelRivalsUsername
+          marvelRivalsUsername: userData.marvelRivalsUsername,
+          lastLogin: userData.lastLogin
         };
         localStorage.setItem('user', JSON.stringify(userDataToStore));
-        
         contextLogin(userDataToStore);
+        
         toaster.create({
           title: 'Login successful',
           description: `Welcome back, ${userData.username}!`,
