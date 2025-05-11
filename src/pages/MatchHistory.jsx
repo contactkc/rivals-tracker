@@ -20,8 +20,6 @@ import {
 import Navbar from '../components/Navbar';
 
 function MatchHistory() {
-    console.log('Type of Card:', typeof Card, Card);
-    console.log('Type of VStack:', typeof VStack, VStack);
     const { user } = useUser();
     const marvelUsername = user?.marvelRivalsUsername;
 
@@ -29,9 +27,10 @@ function MatchHistory() {
         marvelUsername ? `player/${marvelUsername}/match-history` : null
     );
 
+    console.log('Match history data:', matchHistoryData);
+    
     const matchHistory = matchHistoryData?.match_history;
-
-    console.log('Type of Card.Root:', typeof Card.Root, Card.Root);
+    console.log('Match history array:', matchHistory);
 
     if (!loading && !error && (!user || !marvelUsername)) {
         return (
