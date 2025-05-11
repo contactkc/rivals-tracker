@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import useApi from './hooks/useApi';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
+import { LuSearch } from "react-icons/lu";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,7 +55,7 @@ function App() {
                     ml={2}
                     _hover={{ bg: 'white.700' }}
                   >
-                    Search
+                    <LuSearch />
                   </Button>
                 </Flex>
               </form>
