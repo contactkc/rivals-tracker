@@ -12,7 +12,7 @@ function PatchConnect({ patch }) {
         </Timeline.Connector>
         <Timeline.Content>
           <Timeline.Title>{patch.title}</Timeline.Title>
-          <Image src={patch.source} alt={patch.alt}></Image>
+          <Image src={patch.source} alt={patch.alt} rounded="3xl"></Image>
           <Timeline.Description textAlign="left">{patch.date}</Timeline.Description>
             <Text textStyle="sm" textAlign="left">
                 {patch.fullContent}

@@ -217,7 +217,7 @@ function Profile() {
       <Navbar />
       <Text fontSize="2rem" fontWeight="800" ml={8} mt={4}>Profile Settings</Text>
       <Center mt={4}>
-        <Card.Root variant="outline" key="profileCard" width="2xl" p={6}>
+        <Card.Root variant="outline" key="profileCard" width="2xl" p={6} rounded="3xl">
           <Center mb={6}>
             <Avatar.Root size="2xl">
               {playerLoading ? (

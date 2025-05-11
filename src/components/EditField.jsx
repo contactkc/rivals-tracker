@@ -116,7 +116,7 @@ function EditField({
                   onChange={(e) => setNewValue(e.target.value)}
                   bg="gray.800"
                   border="none"
-                  rounded="3xl"
+                  rounded="2xl"
                   _focus={{ boxShadow: 'none', bg: 'gray.800' }}
                 />
                 

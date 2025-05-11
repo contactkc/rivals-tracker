@@ -28,7 +28,7 @@ export const UserProvider = ({ children }) => {
     setUser(null);
     toaster.create({
       title: 'Logout successful',
-      description: 'See you next time!',
+      description: 'See you next time!'
     });
   };
 

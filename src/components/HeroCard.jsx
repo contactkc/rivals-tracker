@@ -2,7 +2,7 @@ import { Box, Card, Image, HStack, Badge, Text } from '@chakra-ui/react';
 
 function HeroCard({ hero }) {
     return(
-        <Card.Root flexDirection="row" variant="outline" key="outline" overflow="hidden" maxW="5xl">
+        <Card.Root flexDirection="row" variant="outline" key="outline" overflow="hidden" maxW="5xl" rounded="3xl">
                 <Image
                     objectFit="cover"
                     maxW="200px"
