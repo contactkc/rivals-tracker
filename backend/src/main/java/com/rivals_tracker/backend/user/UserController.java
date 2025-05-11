@@ -7,43 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 import java.util.Optional;
 
-// Request Body DTO for updating Marvel Rivals username
-class UpdateMarvelUsernameRequest {
-    public String marvelRivalsUsername;
-}
-
 @RestController
 @RequestMapping("/api/users") // Base path for user-related endpoints
 public class UserController {
 
-    private final UserService userService;
-
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private UserService userService;
 
-    // Endpoint to update the Marvel Rivals username for a specific user
-    // PUT is often used for updating resources
-    @PutMapping("/{userId}/marvel-username")
-    public ResponseEntity<?> updateMarvelRivalsUsername(
-            @PathVariable UUID userId, // Get the user ID from the URL path
-            @RequestBody UpdateMarvelUsernameRequest request) { // Get the new username from the request body
-
-        // In a real app, you'd verify the authenticated user is the one making the request
-        // to prevent users from updating others' profiles.
-
-        Optional<User> updatedUserOptional = userService.updateMarvelRivalsUsername(userId, request.marvelRivalsUsername);
-
-        if (updatedUserOptional.isPresent()) {
-            // In a real app, return a DTO without the password
-            return new ResponseEntity<>(updatedUserOptional.get(), HttpStatus.OK); // 200 OK
-        } else {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND); // 404 Not Found
-        }
-    }
-
-    // endpoint to get user details (exclude sensitive info)
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable UUID userId) {
         Optional<User> userOptional = userService.findById(userId);
@@ -56,4 +26,44 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
     }
+
+    @PutMapping("/{userId}/username")
+    public ResponseEntity<?> updateUsername(
+            @PathVariable UUID userId,
+            @RequestBody UpdateUsernameRequest request) {
+        return userService.updateUsername(userId, request.username)
+            .map(user -> ResponseEntity.ok().build())
+            .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{userId}/password")
+    public ResponseEntity<?> updatePassword(
+            @PathVariable UUID userId,
+            @RequestBody UpdatePasswordRequest request) {
+        return userService.updatePassword(userId, request.password)
+            .map(user -> ResponseEntity.ok().build())
+            .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{userId}/marvel-username")
+    public ResponseEntity<?> updateMarvelRivalsUsername(
+            @PathVariable UUID userId,
+            @RequestBody UpdateMarvelUsernameRequest request) {
+        return userService.updateMarvelRivalsUsername(userId, request.marvelRivalsUsername)
+            .map(user -> ResponseEntity.ok().build())
+            .orElse(ResponseEntity.notFound().build());
+    }
+}
+
+// Request Body DTOs
+class UpdateUsernameRequest {
+    public String username;
+}
+
+class UpdatePasswordRequest {
+    public String password;
+}
+
+class UpdateMarvelUsernameRequest {
+    public String marvelRivalsUsername;
 }

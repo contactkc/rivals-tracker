@@ -1,6 +1,7 @@
 package com.rivals_tracker.backend.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
@@ -8,27 +9,52 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public Optional<User> findById(UUID id) {
+        return userRepository.findById(id);
     }
-
-    public Optional<User> updateMarvelRivalsUsername(UUID userId, String marvelRivalsUsername) {
-        Optional<User> userOptional = userRepository.findById(userId);
-
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            user.setMarvelRivalsUsername(marvelRivalsUsername);
-            userRepository.save(user); // Save the updated user
-            return Optional.of(user);
-        } else {
-            return Optional.empty(); // User not found
+    
+    /**
+     * Update a user's username
+     */
+    public Optional<User> updateUsername(UUID userId, String newUsername) {
+        // Check if username is already taken
+        if (userRepository.findByUsername(newUsername).isPresent()) {
+            throw new IllegalArgumentException("Username already taken");
         }
+        
+        return userRepository.findById(userId)
+            .map(user -> {
+                user.setUsername(newUsername);
+                return userRepository.save(user);
+            });
     }
-
-    public Optional<User> findById(UUID userId) {
-        return userRepository.findById(userId);
+    
+    /**
+     * Update a user's password
+     */
+    public Optional<User> updatePassword(UUID userId, String newPassword) {
+        return userRepository.findById(userId)
+            .map(user -> {
+                // Encode the password before saving
+                user.setPassword(passwordEncoder.encode(newPassword));
+                return userRepository.save(user);
+            });
+    }
+    
+    /**
+     * Update a user's Marvel Rivals username
+     */
+    public Optional<User> updateMarvelRivalsUsername(UUID userId, String newMarvelUsername) {
+        return userRepository.findById(userId)
+            .map(user -> {
+                user.setMarvelRivalsUsername(newMarvelUsername);
+                return userRepository.save(user);
+            });
     }
 }
