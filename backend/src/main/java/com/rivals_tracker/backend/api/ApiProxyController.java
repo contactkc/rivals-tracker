@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/proxy")
@@ -54,34 +55,6 @@ public class ApiProxyController {
             return ResponseEntity.ok(response.getBody());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/player/{username}/match-history")
-    public ResponseEntity<?> getPlayerMatchHistory(@PathVariable String username) {
-        String externalMatchHistoryUrl = API_BASE_URL + "player/" + username+ "/match-history";
-        
-        HttpEntity<String> entity = createRequestEntity();
-
-        try {
-            ResponseEntity<String> response = restTemplate.exchange(
-                externalMatchHistoryUrl,
-                HttpMethod.GET,
-                entity,
-                String.class
-            );
-            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
-
-        } catch (HttpClientErrorException e) {
-            System.err.println("Client error fetching v2 match history: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
-             return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
-        } catch (HttpServerErrorException e) {
-            System.err.println("Server error fetching v2 match history: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
-             return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("An unexpected error occurred while proxying v2 match history: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal error occurred while fetching match history.");
         }
     }
 }

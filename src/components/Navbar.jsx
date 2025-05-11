@@ -36,6 +36,13 @@ function Navbar() {
           <Link href="/patches" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
             Patch Notes
           </Link>
+          {/* New: Match History Link (only show if logged in) */}
+          {user && (
+               <Link href="/my-match-history" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
+                 Match History
+               </Link>
+           )}
+        
         </Flex>
 
         {/* auth links */}
