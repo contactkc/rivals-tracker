@@ -74,14 +74,14 @@ public class ApiProxyController {
             return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
 
         } catch (HttpClientErrorException e) {
-            System.err.println("Client error fetching v2 match history: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
+            System.err.println("Client error fetching v1 match history: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
              return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
         } catch (HttpServerErrorException e) {
-            System.err.println("Server error fetching v2 match history: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
+            System.err.println("Server error fetching v1 match history: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
              return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("An unexpected error occurred while proxying v2 match history: " + e.getMessage());
+            System.err.println("An unexpected error occurred while proxying v1 match history: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal error occurred while fetching match history.");
         }
     }

@@ -9,6 +9,7 @@ import Maps from './pages/maps.jsx';
 import Patches from './pages/patches.jsx';
 import Player from './pages/player.jsx';
 import Profile from './pages/profile.jsx';
+import MatchHistory from './pages/MatchHistory.jsx';
 import './index.css';
 import { Provider } from './components/ui/provider.jsx';
 import { UserProvider } from './context/UserContext.jsx';
@@ -36,6 +37,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/profile/:userId" element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            } />
+            <Route path="/my-match-history" element={
+              <ProtectedRoute> {/* Wrap in ProtectedRoute */}
+                <MatchHistory /> {/* Render the MatchHistory component */}
               </ProtectedRoute>
             } />
             <Route path="/player/:username" element={<Player />} />
