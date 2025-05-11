@@ -39,7 +39,7 @@ function Login() {
         contextLogin(userDataToStore);
         toaster.create({
           title: 'Login successful',
-          description: `Welcome back, ${userData.username}`,
+          description: `Welcome back, ${userData.username}!`,
           type: 'success',
         });
         navigate('/');

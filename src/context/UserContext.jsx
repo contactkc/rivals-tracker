@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import { fetchWithAuth } from '../utils/api';
-
+import { Toaster, toaster } from "@/components/ui/toaster"
 const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
@@ -26,6 +26,11 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setUser(null);
+    toaster.create({
+      title: 'Logout successful',
+      description: 'See you next time!',
+      type: 'success',
+    });
   };
 
   return (
