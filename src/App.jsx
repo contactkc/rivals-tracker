@@ -33,9 +33,9 @@ function App() {
           <Box className="flex flex-col md:flex-row p-8 max-w-7xl mx-auto">
             {/* title & search */}
             <Box className="md:w-1/2 flex flex-col items-center md:items-start">
-              <h1 className="login__title">Marvel Rivals Tracker</h1>
+              <h1 className="login__title animate-fade-down">Marvel Rivals Tracker</h1>
               <form onSubmit={handleSearch}>
-                <Flex maxW="md" w="full">
+                <Flex maxW="md" w="full" className="animate-fade-down">
                   <Input
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}

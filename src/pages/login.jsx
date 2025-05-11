@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Box, Link, Heading, Input, Button, Text, VStack, AbsoluteCenter } from '@chakra-ui/react';
+import { Box, Link, Input, Button, Text, VStack, AbsoluteCenter } from '@chakra-ui/react';
+import { Toaster, toaster } from "@/components/ui/toaster"
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useUser } from '../context/UserContext';
@@ -25,24 +26,38 @@ function Login() {
       
       if (response.ok) {
         const userData = await response.json();
-        // Store token instead of whole user object
+        // store token instead of whole user object
         localStorage.setItem('token', userData.token);
-        // Store user data
+        // store user data
         const userDataToStore = {
           id: userData.id,
           username: userData.username,
-          marvelRivalsUsername: userData.marvelRivalsUsername
+          marvelRivalsUsername: userData.marvelRivalsUsername,
+          lastLogin: userData.lastLogin
         };
         localStorage.setItem('user', JSON.stringify(userDataToStore));
-        
         contextLogin(userDataToStore);
+        
+        toaster.create({
+          title: 'Login successful',
+          description: `Welcome back, ${userData.username}!`,
+          type: 'success',
+        });
         navigate('/');
       } else {
         const errorText = await response.text();
-        setError(errorText || 'Invalid username or password');
+        toaster.create({
+          title: 'Login failed',
+          description: errorText || 'Invalid username or password',
+          type: 'error',
+        });
       }
     } catch (err) {
-      setError('Login failed: ' + err.message);
+      toaster.create({
+          title: 'Login failed',
+          description: errorText || 'Invalid username or password',
+          type: 'error',
+        });
     }
   };
 
@@ -51,7 +66,7 @@ function Login() {
         <Navbar />
         <AbsoluteCenter>
             <VStack spacing={8} maxW="400px" mx="auto">
-            <h1 className="text-4xl font-bold">Login in to Rivals Tracker</h1>
+            <h1 className="text-4xl font-bold">Login to Rivals Tracker</h1>
             <form onSubmit={handleSubmit}>
                 <VStack spacing={4}>
                 <Input

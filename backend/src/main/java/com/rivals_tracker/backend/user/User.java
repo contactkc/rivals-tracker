@@ -1,6 +1,7 @@
 package com.rivals_tracker.backend.user;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity // Marks this class as a JPA entity to be mapped to a database table
@@ -19,6 +20,9 @@ public class User {
 
     @Column(unique = true) // Marvel Rivals username should be unique (optional, depends on requirements)
     private String marvelRivalsUsername; // Field to store the game username
+
+    @Column
+    private LocalDateTime lastLogin;  // field for tracking last login
 
     // Constructors (Lombok's @Data can generate a default constructor)
     // JPA requires a no-argument constructor
@@ -48,6 +52,10 @@ public class User {
         return this.marvelRivalsUsername;
     }
 
+    public LocalDateTime getLastLogin() {
+        return this.lastLogin;
+    }
+
     // --- Setters ---
     // Note: Typically you wouldn't have a setter for the auto-generated ID
     public void setId(UUID id) { this.id = id; } // Avoid this setter for generated IDs
@@ -62,6 +70,10 @@ public class User {
 
     public void setMarvelRivalsUsername(String marvelRivalsUsername) {
         this.marvelRivalsUsername = marvelRivalsUsername;
+    }
+
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
     }
     // Optional: You might also want to generate equals(), hashCode(), and toString() methods
     // using your IDE's built-in features for better object comparison and debugging.

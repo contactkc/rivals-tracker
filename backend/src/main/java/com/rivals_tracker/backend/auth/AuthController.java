@@ -58,7 +58,7 @@ public class AuthController {
 
     @PostMapping("/login") // Handles POST requests to /api/auth/login
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-         try {
+        try {
             Optional<User> userOptional = authService.loginUser(loginRequest.username, loginRequest.password);
 
             if (userOptional.isPresent()) {
@@ -70,6 +70,7 @@ public class AuthController {
                 response.put("id", user.getId());
                 response.put("username", user.getUsername());
                 response.put("marvelRivalsUsername", user.getMarvelRivalsUsername());
+                response.put("lastLogin", user.getLastLogin());
                 
                 return new ResponseEntity<>(response, HttpStatus.OK); // 200 OK
             } else {

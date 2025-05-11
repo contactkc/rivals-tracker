@@ -5,6 +5,7 @@ import {
   Button,
   Text,
   Link,
+  Image,
 } from '@chakra-ui/react';
 import { useUser } from '../context/UserContext';
 import { FaCaretDown } from "react-icons/fa";
@@ -17,7 +18,7 @@ function Navbar() {
       <Flex justify="space-between" align="center" maxW="1200px" mx="auto">
         {/* title */}
           <Flex>
-            <Link textStyle="lg" fontWeight="bold" href="/" _hover={{ textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>Rivals Tracker</Link>
+            <Link textStyle="lg" fontWeight="bold" href="/" _hover={{ textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}><Image src="/rivals-logo.svg" height="60px"/>Rivals Tracker</Link>
           </Flex>
 
         {/* nav links */}
