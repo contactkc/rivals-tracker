@@ -44,7 +44,7 @@ function Navbar() {
               <Text fontSize="sm" color="white">
                 Welcome, <Link href={`/profile/${user.id}`} _focus={{ outline: 'none', boxShadow: 'none' }}>{user.username} <FaCaretDown /></Link>
               </Text>
-              <Button onClick={logout} size="sm" variant="outline" >
+              <Button onClick={logout} size="sm" variant="outline" rounded="3xl" >
                 Logout
               </Button>
             </>

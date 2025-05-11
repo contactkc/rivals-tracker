@@ -93,7 +93,7 @@ function EditField({
           {label}: {placeholderValue || (fieldType === 'password' ? '●●●●●●●●●' : value)}
         </Text>
         <Spacer />
-        <Button variant="outline" onClick={handleToggle} size="sm">
+        <Button variant="outline" onClick={handleToggle} size="sm" rounded="3xl">
           {isOpen ? 'Cancel' : 'Edit'} {!isOpen && <FaRegEdit style={{ marginLeft: '8px' }}/>}
         </Button>
       </Flex>
@@ -116,7 +116,7 @@ function EditField({
                   onChange={(e) => setNewValue(e.target.value)}
                   bg="gray.800"
                   border="none"
-                  rounded="xl"
+                  rounded="3xl"
                   _focus={{ boxShadow: 'none', bg: 'gray.800' }}
                 />
                 
@@ -128,7 +128,7 @@ function EditField({
                     onChange={(e) => setConfirmValue(e.target.value)}
                     bg="gray.800"
                     border="none"
-                    rounded="xl"
+                    rounded="3xl"
                     _focus={{ boxShadow: 'none', bg: 'gray.800' }}
                   />
                 )}
@@ -141,7 +141,7 @@ function EditField({
                   isLoading={isSubmitting}
                   loadingText="Saving"
                   bg="white"
-                  rounded="xl"
+                  rounded="3xl"
                 >
                   Save {label}
                 </Button>

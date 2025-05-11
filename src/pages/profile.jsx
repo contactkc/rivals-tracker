@@ -261,7 +261,7 @@ function Profile() {
             />
             
             <Separator my={2} borderColor="gray.600" />
-            <Flex>
+            <Flex alignItems="center">
               <Text fontSize="xs" color="gray.400" fontStyle="italic" textAlign="left">
                 Last login: {formatLastLogin(user?.lastLogin)}
               </Text>
@@ -269,6 +269,7 @@ function Profile() {
               <Button 
                 variant="outline" 
                 size="sm"
+                rounded="3xl"
                 _hover={{ 
                   bg: "red.900", 
                   borderColor: "red.700",
@@ -299,6 +300,7 @@ function Profile() {
                     ref={cancelRef} 
                     onClick={() => setIsDeleteDialogOpen(false)}
                     variant="outline"
+                    rounded="3xl"
                   >
                     Cancel
                   </Button>
@@ -307,6 +309,7 @@ function Profile() {
                     onClick={handleDeleteAccount} 
                     ml={3}
                     variant="outline"
+                    rounded="3xl"
                     _hover={{ 
                       bg: "red.900", 
                       borderColor: "red.700",
