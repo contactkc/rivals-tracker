@@ -6,6 +6,7 @@ import { Center, Box, Text, VStack, Card, Avatar, Spinner, Separator, Spacer, Fl
 import { format } from 'date-fns';
 import EditField from '@/components/EditField';
 import useApi from '../hooks/useApi';
+import { LuCat } from "react-icons/lu";
 
 function Profile() {
   const { userId } = useParams();
@@ -224,7 +225,9 @@ function Profile() {
               ) : avatarUrl ? (
                 <Avatar.Image src={avatarUrl} alt={`${marvelUsername}'s profile`} />
               ) : (
-                <Avatar.Fallback></Avatar.Fallback>
+                <Avatar.Fallback>
+                  <LuCat size={36} />
+                </Avatar.Fallback>
               )}
             </Avatar.Root>
           </Center>

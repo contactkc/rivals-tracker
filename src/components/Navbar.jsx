@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { useUser } from '../context/UserContext';
 import { FaCaretDown } from "react-icons/fa";
+import { LuDoorOpen } from "react-icons/lu";
 
 function Navbar() {
   const { user, logout } = useUser();
@@ -45,7 +46,7 @@ function Navbar() {
                 Welcome, <Link href={`/profile/${user.id}`} _focus={{ outline: 'none', boxShadow: 'none' }}>{user.username} <FaCaretDown /></Link>
               </Text>
               <Button onClick={logout} size="sm" variant="outline" rounded="3xl" >
-                Logout
+                <LuDoorOpen />
               </Button>
             </>
           ) : (
