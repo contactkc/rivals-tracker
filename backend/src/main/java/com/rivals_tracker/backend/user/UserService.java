@@ -49,6 +49,7 @@ public class UserService {
     
     /**
      * Update a user's Marvel Rivals username
+     * accepts null to remove the username
      */
     public Optional<User> updateMarvelRivalsUsername(UUID userId, String newMarvelUsername) {
         return userRepository.findById(userId)
@@ -56,5 +57,18 @@ public class UserService {
                 user.setMarvelRivalsUsername(newMarvelUsername);
                 return userRepository.save(user);
             });
+    }
+
+    /**
+     * Delete a user account
+     * @param userId The ID of the user to delete
+     * @return true if the user was deleted, false if the user wasn't found
+     */
+    public boolean deleteUser(UUID userId) {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+            return true;
+        }
+        return false;
     }
 }

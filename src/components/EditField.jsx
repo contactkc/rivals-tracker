@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Box, Input, Button, Text, VStack, Flex, Spacer, Separator
 } from '@chakra-ui/react';
@@ -14,7 +14,8 @@ function EditField({
   fieldType = 'text', 
   onSave, 
   placeholderValue = '',
-  requireConfirmation = false 
+  requireConfirmation = false,
+  allowEmpty = false
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [newValue, setNewValue] = useState('');
@@ -22,20 +23,35 @@ function EditField({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  const handleToggle = () => setIsOpen(!isOpen);
+  // initialize newValue with current value when component opens
+  useEffect(() => {
+    if (isOpen) {
+      setNewValue(value || '');
+    }
+  }, [isOpen, value]);
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+    if (isOpen) {
+      // reset fields
+      setNewValue('');
+      setConfirmValue('');
+      setError('');
+    }
+  };
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     
     // validation
-    if (requireConfirmation && newValue !== confirmValue) {
-      setError('Values do not match');
+    if (!allowEmpty && !newValue.trim()) {
+      setError('This field cannot be empty');
       return;
     }
     
-    if (!newValue.trim()) {
-      setError('This field cannot be empty');
+    if (requireConfirmation && newValue !== confirmValue) {
+      setError('Values do not match');
       return;
     }
     
@@ -46,18 +62,24 @@ function EditField({
       toaster.create({
         title: "Success",
         description: `${label} updated successfully`,
-        type: "success",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right"
       });
       
       setIsOpen(false);
       setNewValue('');
       setConfirmValue('');
     } catch (err) {
-      setError(err.message || 'Failed to update');
+      setError('Failed to update');
       toaster.create({
         title: "Error",
         description: 'Failed to update',
-        type: "error",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right"
       });
     } finally {
       setIsSubmitting(false);
@@ -115,12 +137,11 @@ function EditField({
                 
                 <Button
                   type="submit"
-                  bg="white"
-                  color="black"
-                  rounded="xl"
                   w="full"
                   isLoading={isSubmitting}
                   loadingText="Saving"
+                  bg="white"
+                  rounded="xl"
                 >
                   Save {label}
                 </Button>
