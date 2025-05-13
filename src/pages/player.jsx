@@ -1,12 +1,75 @@
 import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import useApi from '../hooks/useApi';
 import { Box, Text, Spinner, Alert, AbsoluteCenter, 
   VStack, Image, Card, HStack, Avatar, Heading, SimpleGrid } from '@chakra-ui/react';
+import { Chart, useChart } from "@chakra-ui/charts";
+import { Bar, BarChart, Area, AreaChart, XAxis, YAxis, CartesianGrid, Legend, Tooltip } from "recharts";
 import Navbar from '@/components/Navbar';
 
 function Player() {
   const { username } = useParams();
   const { data, loading, error } = useApi(`player/${username}`);
+  const { data: matchHistoryData } = useApi(username ? `player/${username}/match-history` : null);
+  
+  const heroChartData = !loading && data?.hero_matchups ? 
+    data.hero_matchups
+      .filter(hero => hero.hero_id && hero.hero_name !== "Unknown")
+      .sort((a, b) => parseFloat(b.win_rate) - parseFloat(a.win_rate))
+      .slice(0, 5)
+      .map(hero => ({
+        name: formatHeroName(hero.hero_name),
+        "Win Rate": parseFloat(hero.win_rate || 0),
+        Matches: hero.matches
+      }))
+    : [];
+  
+  const kdaAreaData = !loading && matchHistoryData?.match_history ? 
+    matchHistoryData.match_history.slice(0, 5).reverse().map((match, index) => {
+      const perf = match?.player_performance || {};
+      const kda = perf.deaths > 0 ? 
+        ((perf.kills || 0) + (perf.assists || 0)) / (perf.deaths || 1) : 
+        (perf.kills || 0) + (perf.assists || 0);
+      
+      return {
+        match: `Match ${index + 1}`,
+        KDA: parseFloat(kda.toFixed(2)),
+        hero: formatHeroName(perf?.hero_name || 'Unknown')
+      };
+    })
+    : [];
+  
+  // chart hooks with their respective data
+  const heroChart = useChart({
+    data: heroChartData,
+    colors: {
+      "Win Rate": "gray.300" 
+    }
+  });
+  
+  const kdaAreaChart = useChart({
+    data: kdaAreaData,
+    colors: {
+      "KDA": "gray.400"
+    }
+  });
+  
+  function formatHeroName(name) {
+    if (!name) return 'Unknown Hero';
+    return name
+      .split(' ')
+      .map(word =>
+        word
+          .split(/([&-])/g)
+          .map(part =>
+            part.match(/[a-zA-Z]/)
+              ? part.charAt(0).toUpperCase() + part.slice(1)
+              : part
+          )
+          .join('')
+      )
+      .join(' ');
+  }
 
   if (loading) return(
     <Box position="relative" height="100vh">
@@ -40,50 +103,32 @@ function Player() {
         </VStack>
       </AbsoluteCenter>
     </Box>
-    
   );
 
   const overallStats = data?.overall_stats;
   const heroMatchups = data?.hero_matchups;
   const teammates = data?.team_mates;
+  const matchHistory = matchHistoryData?.match_history || [];
 
-  // Calculate total KDA if overallStats and nested ranked/unranked exist
+  // calculate total KDA if overallStats and nested ranked/unranked exist
   const totalKills = (overallStats?.ranked?.total_kills ?? 0) + (overallStats?.unranked?.total_kills ?? 0);
   const totalDeaths = (overallStats?.ranked?.total_deaths ?? 0) + (overallStats?.unranked?.total_deaths ?? 0);
   const totalAssists = (overallStats?.ranked?.total_assists ?? 0) + (overallStats?.unranked?.total_assists ?? 0);
 
-  // Access total matches and wins directly
+  // access total matches and wins
   const totalMatchesPlayed = overallStats?.total_matches ?? 0;
   const totalWins = overallStats?.total_wins ?? 0;
 
-  // Calculate overall win rate
+  // calculate overall win rate
   const overallWinRate = totalMatchesPlayed > 0 ? ((totalWins / totalMatchesPlayed) * 100).toFixed(2) : 'N/A';
-
-  function formatHeroName(name) {
-    if (!name) return 'Unknown Hero';
-    return name
-      .split(' ')
-      .map(word =>
-        word
-          .split(/([&-])/g)
-          .map(part =>
-            part.match(/[a-zA-Z]/)
-              ? part.charAt(0).toUpperCase() + part.slice(1)
-              : part
-          )
-          .join('')
-      )
-      .join(' ');
-  }
 
   return (
     <Box color="white">
         <Navbar />
 
         <Text fontSize="xl" fontWeight="600">Player Statistics</Text>
-        {/* Basic Player Info Section */}
         <VStack spacing={8} maxW="container.lg" mx="auto">
-          <HStack>
+          <HStack maxW="full" w="100%">
             <Card.Root mt={6} maxW="250px" rounded="3xl" w="250px">
               <Card.Body>
                   <VStack>
@@ -101,7 +146,7 @@ function Player() {
             {/* Overall Stats Section */}
             {overallStats && 
             (
-              <Card.Root maxW="2xl" w="full" borderWidth="1px" borderRadius="lg" p={6} rounded="3xl">
+              <Card.Root w="full" borderWidth="1px" borderRadius="lg" p={6} rounded="3xl" h="100%">
                   <Text fontSize="md" mb={4} fontWeight="bold">Overall Stats</Text>
                   {/* Check if there are any stats to display before rendering the grid */}
                   {totalMatchesPlayed > 0 || totalKills > 0 || totalDeaths > 0 || totalAssists > 0 ? (
@@ -135,6 +180,75 @@ function Player() {
                   ) : (
                         <Text color="gray.500">No significant overall stats data available for this player.</Text>
                   )}
+              </Card.Root>
+            )}
+          </HStack>
+
+          <HStack maxW="full" w="100%">
+            {heroChartData.length > 0 && (
+              <Card.Root w="full" p={4} rounded="3xl">
+                <Text fontSize="md" fontWeight="bold" mb={4}>Top Heroes by Win Rate</Text>
+                <Chart.Root h="300px" chart={heroChart}>
+                  <BarChart data={heroChart.data}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={heroChart.color("gray.800")} />
+                    <XAxis 
+                      dataKey={heroChart.key("name")} 
+                      axisLine={{ stroke: heroChart.color("gray.800") }}
+                      tick={{ fill: heroChart.color("gray.800") }}
+                      angle={-45}
+                      textAnchor="end"
+                      height={60}
+                    />
+                    <YAxis 
+                      axisLine={{ stroke: heroChart.color("gray.800") }}
+                      tick={{ fill: heroChart.color("gray.800") }}
+                      domain={[0, 100]}
+                      tickFormatter={(value) => `${value}%`}
+                    />
+                    <Tooltip 
+                      cursor={{ fill: heroChart.color("gray.900") }}
+                      contentStyle={{ backgroundColor: "black", borderColor: "bg.muted", color: "white" }}
+                      labelStyle={{ fontWeight: "bold" }}
+                      formatter={(value) => [`${value.toFixed(2)}%`, "Win Rate"]}
+                    />
+                    <Legend />
+                    <Bar dataKey={heroChart.key("Win Rate")} fill={heroChart.color("gray.300")} />
+                  </BarChart>
+                </Chart.Root>
+              </Card.Root>
+            )}
+            
+            {kdaAreaData.length > 0 && (
+              <Card.Root w="full" p={4} rounded="3xl">
+                <Text fontSize="md" fontWeight="bold" mb={4}>Recent Performance Trend</Text>
+                <Chart.Root h="300px" chart={kdaAreaChart}>
+                  <AreaChart data={kdaAreaChart.data}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={kdaAreaChart.color("gray.800")} />
+                    <XAxis 
+                      dataKey={kdaAreaChart.key("match")} 
+                      axisLine={{ stroke: kdaAreaChart.color("gray.800") }}
+                      tick={{ fill: kdaAreaChart.color("gray.800") }}
+                    />
+                    <YAxis 
+                      axisLine={{ stroke: kdaAreaChart.color("gray.800") }}
+                      tick={{ fill: kdaAreaChart.color("gray.800") }}
+                    />
+                    <Tooltip 
+                      cursor={{ fill: kdaAreaChart.color("gray.900") }}
+                      contentStyle={{ backgroundColor: "black", borderColor: "bg.muted", color: "white" }}
+                      labelStyle={{ fontWeight: "bold" }}
+                      formatter={(value, name, props) => [`${value}`, `${name} (${props.payload.hero})`]}
+                    />
+                    <Legend />
+                    <Area 
+                      type="monotone" 
+                      dataKey={kdaAreaChart.key("KDA")} 
+                      stroke={kdaAreaChart.color("gray.300")} 
+                      fill={kdaAreaChart.color("gray.300")} 
+                      fillOpacity={0.3}
+                    />
+                  </AreaChart>
+                </Chart.Root>
               </Card.Root>
             )}
           </HStack>

@@ -157,7 +157,7 @@ function MatchHistory() {
                 <Text fontSize="xl" fontWeight="600">Match History for {marvelUsername}</Text>
                 
                 {kdaChartData.length > 0 && (
-                    <Card.Root w="full" p={4} rounded="3xl">
+                    <Card.Root maxW="5xl" w="full" p={4} rounded="3xl">
                         <Text fontSize="md" fontWeight="bold" mb={4}>Recent Match Performance</Text>
                         <Chart.Root h="300px" chart={kdaChart}>
                             <BarChart data={kdaChart.data}>
