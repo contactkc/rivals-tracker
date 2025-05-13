@@ -1,6 +1,6 @@
 import { useUser } from '../context/UserContext';
 import useApi from '../hooks/useApi';
-
+import useMaps from '../hooks/useMaps';
 import {
     Box,
     Text,
@@ -26,11 +26,27 @@ function MatchHistory() {
     const { data: matchHistoryData, loading, error } = useApi(
         marvelUsername ? `player/${marvelUsername}/match-history` : null
     );
+    const { maps: AllMaps } = useMaps();
 
-    console.log('Match history data:', matchHistoryData);
-    
     const matchHistory = matchHistoryData?.match_history;
-    console.log('Match history array:', matchHistory);
+
+    const getMapImageUrl = (map_id) => {
+        const found = AllMaps.find((m) => Number(m.map_id) === Number(map_id));
+        if (found?.images && found.images[2]) {
+            return `https://marvelrivalsapi.com${found.images[2]}`;
+        }
+        if (found?.imageUrl) {
+            return found.imageUrl;
+        }
+        const match = matchHistory?.find(m => m.map_id === map_id);
+        if (match?.map_thumbnail) {
+            if (match.map_thumbnail.startsWith('/rivals/maps/map_')) {
+                return `https://marvelrivalsapi.com${match.map_thumbnail.replace('/maps/map_', '/maps/large/map_')}`;
+            }
+            return `https://marvelrivalsapi.com${match.map_thumbnail}`;
+        }
+        return 'https://marvelrivalsapi.com/rivals/maps/large/map_1032.png';
+    };
 
     if (!loading && !error && (!user || !marvelUsername)) {
         return (
@@ -104,11 +120,17 @@ function MatchHistory() {
 
                     {matchHistory && matchHistory.length > 0 ? (
 
-                        <VStack spacing={4} maxW="lg" mx="auto">
+                        <VStack spacing={4} mx="auto">
                             {matchHistory.map((match, index) => {
                               const perf = match.player_performance;
                               return (
-                                <Card.Root key={match.match_uid || index} w="full">
+                                <Card.Root key={match.match_uid || index} w="full" flexDirection="row" variant="outline" overflow="hidden" maxW="5xl" rounded="3xl">
+                                    <Image
+                                        objectFit="cover"
+                                        maxW="300px"
+                                        src={getMapImageUrl(match.map_id)}
+                                        alt="Map Thumbnail"
+                                    />
                                   <CardBody>
                                     <VStack align="start" spacing={3}>
                                       <HStack spacing={4} justifyContent="space-between" w="full">
@@ -119,13 +141,6 @@ function MatchHistory() {
                                       </HStack>
                                       <Box h="1px" bg="gray.700" w="full" my={2} />
                                       <HStack spacing={4} w="full" alignItems="center">
-                                        {match.map_thumbnail && (
-                                          <Image
-                                            src={`https://marvelrivalsapi.com${match.map_thumbnail}`}
-                                            alt="Map Thumbnail"
-                                            boxSize="40px"
-                                          />
-                                        )}
                                         <VStack align="start" spacing={0}>
                                           <Text fontWeight="bold">{perf?.hero_name || 'Unknown Hero'}</Text>
                                           <HStack spacing={2}>

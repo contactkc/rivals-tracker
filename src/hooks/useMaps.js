@@ -49,6 +49,7 @@ function useMaps() {
             : 'https://marvelrivalsapi.com/rivals/maps/large/map_1032.png';
 
           return {
+            map_id: map.map_id,
             name: map.name,
             location: map.location,
             description: map.description || 'No description provided...',
@@ -59,6 +60,7 @@ function useMaps() {
             video: map.video,
             imageUrl,
             alt: map.name,
+            images: map.images,
           };
         });
 
