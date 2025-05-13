@@ -4,7 +4,7 @@ import useApi from '../hooks/useApi';
 import { Box, Text, Spinner, Alert, AbsoluteCenter, 
   VStack, Image, Card, HStack, Avatar, Heading, SimpleGrid } from '@chakra-ui/react';
 import { Chart, useChart } from "@chakra-ui/charts";
-import { Bar, BarChart, Area, AreaChart, XAxis, YAxis, CartesianGrid, Legend, Tooltip } from "recharts";
+import { Bar, BarChart, Area, AreaChart, XAxis, YAxis, CartesianGrid, Legend, Tooltip, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts";
 import Navbar from '@/components/Navbar';
 
 function Player() {
@@ -184,42 +184,40 @@ function Player() {
             )}
           </HStack>
 
-          <HStack maxW="full" w="100%">
+          <HStack maxW="full" w="100%" maxH="full" h="100%">
             {heroChartData.length > 0 && (
-              <Card.Root w="full" p={4} rounded="3xl">
+              <Card.Root w="full" p={4} rounded="3xl" maxH="full" h="375px">
                 <Text fontSize="md" fontWeight="bold" mb={4}>Top Heroes by Win Rate</Text>
-                <Chart.Root h="300px" chart={heroChart}>
-                  <BarChart data={heroChart.data}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={heroChart.color("gray.800")} />
-                    <XAxis 
+                <Chart.Root h="350px" chart={heroChart}>
+                  <RadarChart data={heroChart.data} outerRadius="70%">
+                    <PolarGrid stroke={heroChart.color("gray.800")} />
+                    <PolarAngleAxis 
                       dataKey={heroChart.key("name")} 
-                      axisLine={{ stroke: heroChart.color("gray.800") }}
-                      tick={{ fill: heroChart.color("gray.800") }}
-                      angle={-45}
-                      textAnchor="end"
-                      height={60}
+                      tick={{ fill: heroChart.color("gray.300") }}
                     />
-                    <YAxis 
-                      axisLine={{ stroke: heroChart.color("gray.800") }}
-                      tick={{ fill: heroChart.color("gray.800") }}
-                      domain={[0, 100]}
+                    <PolarRadiusAxis 
+                      angle={0} 
+                      domain={[0, 100]} 
+                      tick={{ fill: heroChart.color("gray.300") }}
                       tickFormatter={(value) => `${value}%`}
                     />
+                    <Radar 
+                      dataKey={heroChart.key("Win Rate")} 
+                      stroke={heroChart.color("gray.300")} 
+                      fill={heroChart.color("gray.300")} 
+                      fillOpacity={0.3} 
+                    />
                     <Tooltip 
-                      cursor={{ fill: heroChart.color("gray.900") }}
                       contentStyle={{ backgroundColor: "black", borderColor: "bg.muted", color: "white" }}
-                      labelStyle={{ fontWeight: "bold" }}
                       formatter={(value) => [`${value.toFixed(2)}%`, "Win Rate"]}
                     />
-                    <Legend />
-                    <Bar dataKey={heroChart.key("Win Rate")} fill={heroChart.color("gray.300")} />
-                  </BarChart>
+                  </RadarChart>
                 </Chart.Root>
               </Card.Root>
             )}
             
             {kdaAreaData.length > 0 && (
-              <Card.Root w="full" p={4} rounded="3xl">
+              <Card.Root w="full" p={4} rounded="3xl" maxH="full" h="375px">
                 <Text fontSize="md" fontWeight="bold" mb={4}>Recent Performance Trend</Text>
                 <Chart.Root h="300px" chart={kdaAreaChart}>
                   <AreaChart data={kdaAreaChart.data}>
