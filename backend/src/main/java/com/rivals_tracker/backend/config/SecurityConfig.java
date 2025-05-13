@@ -4,6 +4,7 @@ import com.rivals_tracker.backend.security.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -46,6 +47,7 @@ public class SecurityConfig {
                 // public endpoints
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/proxy/**").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/api/users/**").authenticated()
                 // allow all requests (for development)
                 .anyRequest().permitAll()
                 // use: .anyRequest().authenticated() (change for production)

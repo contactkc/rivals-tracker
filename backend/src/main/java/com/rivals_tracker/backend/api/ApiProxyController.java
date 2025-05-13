@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/api/proxy")
@@ -60,8 +61,7 @@ public class ApiProxyController {
 
     @GetMapping("/player/{username}/match-history")
     public ResponseEntity<?> getPlayerMatchHistory(@PathVariable String username) {
-        String externalMatchHistoryUrl = API_BASE_URL + "player/" + username+ "/match-history";
-        
+        String externalMatchHistoryUrl = API_BASE_URL + "player/" + username;
         HttpEntity<String> entity = createRequestEntity();
 
         try {
@@ -71,17 +71,20 @@ public class ApiProxyController {
                 entity,
                 String.class
             );
-            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode jsonNode = mapper.readTree(response.getBody());
+            return ResponseEntity.status(response.getStatusCode()).body(jsonNode);
 
         } catch (HttpClientErrorException e) {
-            System.err.println("Client error fetching v1 match history: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
-             return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
+            System.err.println("Client error fetching match history: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
+            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
         } catch (HttpServerErrorException e) {
-            System.err.println("Server error fetching v1 match history: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
-             return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
+            System.err.println("Server error fetching match history: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
+            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("An unexpected error occurred while proxying v1 match history: " + e.getMessage());
+            System.err.println("An unexpected error occurred while proxying match history: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal error occurred while fetching match history.");
         }
     }

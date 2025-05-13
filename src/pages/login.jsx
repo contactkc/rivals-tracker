@@ -41,7 +41,6 @@ function Login() {
         toaster.create({
           title: 'Login successful',
           description: `Welcome back, ${userData.username}!`,
-          type: 'success',
         });
         navigate('/');
       } else {
@@ -49,14 +48,12 @@ function Login() {
         toaster.create({
           title: 'Login failed',
           description: errorText || 'Invalid username or password',
-          type: 'error',
         });
       }
     } catch (err) {
       toaster.create({
           title: 'Login failed',
           description: errorText || 'Invalid username or password',
-          type: 'error',
         });
     }
   };

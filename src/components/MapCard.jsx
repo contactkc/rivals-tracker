@@ -2,7 +2,7 @@ import { Box, Card, Image, HStack, Badge, Text } from '@chakra-ui/react';
 
 function MapCard({ map }) {
     return(
-        <Card.Root variant="outline" key={map.name} overflow="hidden" maxW="sm">
+        <Card.Root variant="outline" key={map.name} overflow="hidden" maxW="sm" rounded="3xl">
                 <Image
                     objectFit="cover"
                     src={map.imageUrl}

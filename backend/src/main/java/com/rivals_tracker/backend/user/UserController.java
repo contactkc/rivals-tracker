@@ -53,6 +53,21 @@ public class UserController {
             .map(user -> ResponseEntity.ok().build())
             .orElse(ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable UUID userId) {
+        try {
+            boolean deleted = userService.deleteUser(userId);
+            if (deleted) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("An error occurred while deleting the user: " + e.getMessage());
+        }
+    }
 }
 
 // Request Body DTOs

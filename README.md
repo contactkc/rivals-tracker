@@ -4,7 +4,7 @@ Track your Marvel Rivals stats or anyone you want with their username! This proj
 ## Team Members & Roles
 
 - Benjamin Nguyen
-  - Add work here
+  - Backend: User/Auth OOP, Database, API
 
 - Kenneth Chau
   - Frontend: UI, Components, Hooks

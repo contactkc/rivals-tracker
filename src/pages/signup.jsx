@@ -65,7 +65,6 @@ function Signup() {
                 toaster.create({
                     title: 'Signup successful',
                     description: `Please sign in to continue`,
-                    type: 'success',
                 });
                 navigate('/login');
             } else {
@@ -73,14 +72,12 @@ function Signup() {
                 toaster.create({
                     title: 'Signup failed',
                     description: errorText || 'Failed to create account',
-                    type: 'error',
                 });
             }
         } catch (err) {
             toaster.create({
                 title: 'Signup failed',
                 description: err.message,
-                type: 'error',
             });
         }
     };
