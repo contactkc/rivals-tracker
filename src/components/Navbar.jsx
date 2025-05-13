@@ -37,7 +37,7 @@ function Navbar() {
             Patch Notes
           </Link>
           {/* New: Match History Link (only show if logged in) */}
-          {user && (
+          {user && user.marvelRivalsUsername && (
                <Link href="/my-match-history" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
                  Match History
                </Link>
