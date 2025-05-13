@@ -54,7 +54,5 @@ VITE_MARVEL_RIVALS_API_KEY=YOUR_API_KEY
 - Graphs to showcase user a visually represented data
 
 ## Future Work
-- Move API hooks from front end to proxy calls in back end?
-- Finish player statistic page
 
 ## Known Issues
