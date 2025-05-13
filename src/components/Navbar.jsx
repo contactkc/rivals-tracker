@@ -10,9 +10,39 @@ import {
 import { useUser } from '../context/UserContext';
 import { FaCaretDown } from "react-icons/fa";
 import { LuDoorOpen } from "react-icons/lu";
+import { useLocation } from 'react-router-dom';
 
 function Navbar() {
   const { user, logout } = useUser();
+  const location = useLocation();
+  const currentPath = location.pathname;
+  
+  const isActive = (path) => {
+    return currentPath === path;
+  };
+  
+  const getNavLinkStyles = (path) => {
+    const baseStyles = {
+      fontSize: "sm",
+      _focus: { outline: 'none', boxShadow: 'none' }
+    };
+    
+    if (isActive(path)) {
+      return {
+        ...baseStyles,
+        color: 'white',
+        textDecoration: 'underline',
+        textUnderlineOffset: '4px',
+        fontWeight: '500'
+      };
+    }
+    
+    return {
+      ...baseStyles,
+      color: 'gray.400',
+      _hover: { color: 'white', textDecoration: 'none' }
+    };
+  };
 
   return (
     <Box as="nav">
@@ -24,26 +54,25 @@ function Navbar() {
 
         {/* nav links */}
         <Flex gap={12}>
-          <Link href="/" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
+          <Link href="/" {...getNavLinkStyles("/")}>
             Home
           </Link>
-          <Link href="/heroes" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
+          <Link href="/heroes" {...getNavLinkStyles("/heroes")}>
             Heroes
           </Link>
-          <Link href="/maps" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
+          <Link href="/maps" {...getNavLinkStyles("/maps")}>
             Maps
           </Link>
-          <Link href="/patches" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
+          <Link href="/patches" {...getNavLinkStyles("/patches")}>
             Patch Notes
           </Link>
-          {/* New: Match History Link (only show if logged in) */}
           {user && user.marvelRivalsUsername && (
-               <Link href="/my-match-history" color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
+               <Link href="/my-match-history" {...getNavLinkStyles("/my-match-history")}>
                  Match History
                </Link>
            )}
           {user && user.marvelRivalsUsername && (
-               <Link href={`/player/${user.marvelRivalsUsername}`} color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
+               <Link href={`/player/${user.marvelRivalsUsername}`} {...getNavLinkStyles(`/player/${user.marvelRivalsUsername}`)}>
                  My Stats
                </Link>
            )}
