@@ -144,44 +144,47 @@ function Player() {
             </Card.Root>
 
             {/* Overall Stats Section */}
-            {overallStats && 
-            (
-              <Card.Root w="full" borderWidth="1px" borderRadius="lg" p={6} rounded="3xl" h="100%">
-                  <Text fontSize="md" mb={4} fontWeight="bold">Overall Stats</Text>
-                  {/* Check if there are any stats to display before rendering the grid */}
-                  {totalMatchesPlayed > 0 || totalKills > 0 || totalDeaths > 0 || totalAssists > 0 ? (
-                      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
-                          {/* Display Total Matches */}
-                          {totalMatchesPlayed > 0 && (
-                              <Text>Total Matches: <Text as="span" fontWeight="bold">{totalMatchesPlayed}</Text></Text>
-                          )}
-                          {/* Display Total Wins */}
-                          {totalWins > 0 && (
-                              <Text>Total Wins: <Text as="span" fontWeight="bold">{totalWins}</Text></Text>
-                          )}
-                          {/* Display Overall Win Rate */}
-                          {overallWinRate !== 'N/A' && (
-                              <Text>Win Rate: <Text as="span" fontWeight="bold">{overallWinRate}%</Text></Text>
-                          )}
-                          {/* Display Total Kills */}
-                          {totalKills > 0 && (
-                                <Text>Total Kills: <Text as="span" fontWeight="bold">{totalKills}</Text></Text>
-                          )}
-                            {/* Display Total Deaths */}
-                          {totalDeaths > 0 && (
-                                <Text>Total Deaths: <Text as="span" fontWeight="bold">{totalDeaths}</Text></Text>
-                          )}
-                            {/* Display Total Assists */}
-                          {totalAssists > 0 && (
-                                <Text>Total Assists: <Text as="span" fontWeight="bold">{totalAssists}</Text></Text>
-                          )}
+            <VStack maxW="full" w="100%">
+              {overallStats && 
+              (
+                <Card.Root w="full" borderWidth="1px" borderRadius="lg" p={6} rounded="3xl" h="100%">
+                    <Text fontSize="md" mb={4} fontWeight="bold">Overall Stats</Text>
+                    {/* Check if there are any stats to display before rendering the grid */}
+                    {totalMatchesPlayed > 0 || totalKills > 0 || totalDeaths > 0 || totalAssists > 0 ? (
+                        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
+                            {/* Display Total Matches */}
+                            {totalMatchesPlayed > 0 && (
+                                <Text>Total Matches: <Text as="span" fontWeight="bold">{totalMatchesPlayed}</Text></Text>
+                            )}
+                            {/* Display Total Wins */}
+                            {totalWins > 0 && (
+                                <Text>Total Wins: <Text as="span" fontWeight="bold">{totalWins}</Text></Text>
+                            )}
+                            {/* Display Overall Win Rate */}
+                            {overallWinRate !== 'N/A' && (
+                                <Text>Win Rate: <Text as="span" fontWeight="bold">{overallWinRate}%</Text></Text>
+                            )}
+                            {/* Display Total Kills */}
+                            {totalKills > 0 && (
+                                  <Text>Total Kills: <Text as="span" fontWeight="bold">{totalKills}</Text></Text>
+                            )}
+                              {/* Display Total Deaths */}
+                            {totalDeaths > 0 && (
+                                  <Text>Total Deaths: <Text as="span" fontWeight="bold">{totalDeaths}</Text></Text>
+                            )}
+                              {/* Display Total Assists */}
+                            {totalAssists > 0 && (
+                                  <Text>Total Assists: <Text as="span" fontWeight="bold">{totalAssists}</Text></Text>
+                            )}
 
-                      </SimpleGrid>
-                  ) : (
-                        <Text color="gray.500">No significant overall stats data available for this player.</Text>
-                  )}
-              </Card.Root>
-            )}
+                        </SimpleGrid>
+                    ) : (
+                          <Text color="gray.500">No significant overall stats data available for this player.</Text>
+                    )}
+                </Card.Root>
+              )}
+              <Text fontSize="xs" color="gray.400"fontStyle="italic">Data Last Updated: {data?.updates?.last_update_request}</Text>
+            </VStack>
           </HStack>
 
           <HStack maxW="full" w="100%" maxH="full" h="100%">
