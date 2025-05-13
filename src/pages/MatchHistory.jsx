@@ -142,6 +142,9 @@ function MatchHistory() {
                                       <Box h="1px" bg="gray.700" w="full" my={2} />
                                       <HStack spacing={4} w="full" alignItems="center">
                                         <VStack align="start" spacing={0}>
+                                            <Avatar.Root size="2xl">
+                                                <Avatar.Image src={`http://marvelrivalsapi.com/rivals${perf.hero_type}`} alt={`${perf?.hero_name}'s picture`} />
+                                            </Avatar.Root>
                                           <Text fontWeight="bold">{perf?.hero_name || 'Unknown Hero'}</Text>
                                           <HStack spacing={2}>
                                             <Text>K:{perf?.kills ?? 0}</Text>
