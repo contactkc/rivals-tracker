@@ -6,28 +6,43 @@ function useMaps() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchMaps = async () => {
+    const fetchAllMaps = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          'https://marvelrivalsapi.com/api/v1/maps',
-          {
-            headers: {
-              'x-api-key': import.meta.env.VITE_MARVEL_RIVALS_API_KEY || '',
-            },
-          }
-        );
+        const apiKey = import.meta.env.VITE_MARVEL_RIVALS_API_KEY || '';
+        let allMaps = [];
+        let page = 1;
+        let totalPages = 1;
 
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch maps: ${response.status} ${response.statusText}`
+        do {
+          const response = await fetch(
+            `https://marvelrivalsapi.com/api/v1/maps?page=${page}`,
+            {
+              headers: {
+                'x-api-key': apiKey,
+              },
+            }
           );
-        }
 
-        const data = await response.json();
+          if (!response.ok) {
+            throw new Error(
+              `Failed to fetch maps: ${response.status} ${response.statusText}`
+            );
+          }
+
+          const data = await response.json();
+          allMaps = allMaps.concat(data.maps);
+
+          // calculate total pages from total_maps and maps per page
+          if (page === 1 && data.total_maps && data.maps) {
+            totalPages = Math.ceil(data.total_maps / data.maps.length);
+          }
+
+          page++;
+        } while (page <= totalPages);
 
         // process map data
-        const processedMaps = data.maps.map((map) => {
+        const processedMaps = allMaps.map((map) => {
           const largeImage = map.images?.[2];
           const imageUrl = largeImage
             ? `https://marvelrivalsapi.com${largeImage}`
@@ -47,7 +62,17 @@ function useMaps() {
           };
         });
 
-        setMaps(processedMaps);
+        const uniqueMaps = [];
+        const seenNames = new Set();
+        for (const map of processedMaps) {
+          const lowerName = map.name.toLowerCase();
+          if (!seenNames.has(lowerName)) {
+            seenNames.add(lowerName);
+            uniqueMaps.push(map);
+          }
+        }
+
+        setMaps(uniqueMaps);
         setError(null);
       } catch (err) {
         console.error('Fetch error:', err);
@@ -58,7 +83,7 @@ function useMaps() {
       }
     };
 
-    fetchMaps();
+    fetchAllMaps();
   }, []);
 
   return { maps, loading, error };
