@@ -25,7 +25,7 @@ function Player() {
     : [];
   
   const kdaAreaData = !loading && matchHistoryData?.match_history ? 
-    matchHistoryData.match_history.slice(0, 5).reverse().map((match, index) => {
+    matchHistoryData.match_history.reverse().map((match, index) => {
       const perf = match?.player_performance || {};
       const kda = perf.deaths > 0 ? 
         ((perf.kills || 0) + (perf.assists || 0)) / (perf.deaths || 1) : 
