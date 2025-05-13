@@ -1,18 +1,56 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import useApi from '../hooks/useApi';
+import useMaps from '../hooks/useMaps';
 import { Box, Text, Spinner, Alert, AbsoluteCenter, 
   VStack, Image, Card, HStack, Avatar, Heading, SimpleGrid, Badge, Tag } from '@chakra-ui/react';
-import { Chart, useChart } from "@chakra-ui/charts";
+import { Chart, useChart, BarSegment } from "@chakra-ui/charts";
 import { Bar, BarChart, Area, AreaChart, XAxis, YAxis, CartesianGrid, Legend, Tooltip, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts";
 import Navbar from '@/components/Navbar';
-
 
 function Player() {
   const { username } = useParams();
   const { data, loading, error } = useApi(`player/${username}`);
   const { data: matchHistoryData } = useApi(username ? `player/${username}/match-history` : null);
-  const [chartMode, setChartMode] = useState('winRate'); // 'winRate' or 'matches'
+  const { maps: mapsData, loading: mapsLoading } = useMaps();
+  const [chartMode, setChartMode] = useState('winRate');
+  const [mapsChartData, setMapsChartData] = useState([]);
+  
+  useEffect(() => {
+    if (!loading && data?.maps && Array.isArray(data.maps) && mapsData && Array.isArray(mapsData)) {
+      const processedMapData = data.maps
+        .filter(mapData => mapData && mapData.map_id !== undefined && mapData.matches !== undefined)
+        .map(mapData => {
+          const mapRef = mapsData.find(m => Number(m.map_id) === Number(mapData.map_id));
+          return {
+            ...mapData,
+            mapRef: mapRef,
+            name: mapRef?.name
+          };
+        })
+        .filter(mapData => mapData.name)
+        .sort((a, b) => b.matches - a.matches)
+        .map((mapData, index) => {
+          const colorIndex = index % 5;
+          const colorMap = [
+            "gray.100",
+            "gray.200",
+            "gray.300",
+            "gray.400",
+            "gray.500",
+          ];
+          
+          return {
+            name: mapData.name,
+            value: mapData.matches,
+            color: colorMap[colorIndex]
+          };
+        });
+      
+      console.log("Processed map data:", processedMapData);
+      setMapsChartData(processedMapData);
+    }
+  }, [data, mapsData, loading]);
   
   // helper function to format hero names
   function formatHeroName(name) {
@@ -131,6 +169,11 @@ function Player() {
     colors: {
       "KDA": "gray.400"
     }
+  });
+
+  const mapsChart = useChart({
+    sort: { by: "value", direction: "desc" },
+    data: mapsChartData
   });
 
   if (loading) return(
@@ -391,6 +434,21 @@ function Player() {
               </Card.Root>
             )}
           </HStack>
+
+          {mapsChartData.length > 0 && (
+            <Card.Root w="full" p={4} rounded="3xl">
+              <Text fontSize="md" fontWeight="bold" mb={4}>Most Played Maps</Text>
+              <Box w="full">
+                <BarSegment.Root chart={mapsChart} height="100%">
+                  <BarSegment.Content>
+                    <BarSegment.Bar tooltip />
+                    <BarSegment.Value />
+                  </BarSegment.Content>
+                  <BarSegment.Legend showValue />
+                </BarSegment.Root>
+              </Box>
+            </Card.Root>
+          )}
 
           {/* Hero Matchups Section */}
           {heroMatchups && heroMatchups.length > 0 && (
