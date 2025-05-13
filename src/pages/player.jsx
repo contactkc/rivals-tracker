@@ -2,9 +2,11 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import useApi from '../hooks/useApi';
 import { Box, Text, Spinner, Alert, AbsoluteCenter, 
-  VStack, Image, Card, HStack, Avatar, Heading, SimpleGrid } from '@chakra-ui/react';
-import { Chart, useChart } from "@chakra-ui/charts";
-import { Bar, BarChart, Area, AreaChart, XAxis, YAxis, CartesianGrid, Legend, Tooltip, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts";
+         VStack, Image, Card, HStack, Avatar, Heading, SimpleGrid,
+         Menu } from '@chakra-ui/react';
+import { Chart, useChart, BarSegment } from "@chakra-ui/charts";
+import { Bar, BarChart, Area, AreaChart, XAxis, YAxis, CartesianGrid, Legend, Tooltip, 
+         Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts";
 import Navbar from '@/components/Navbar';
 
 function Player() {
@@ -24,6 +26,17 @@ function Player() {
       }))
     : [];
   
+  const mapChartData = !loading && data?.maps ?
+    data.maps
+      .filter(maps => maps.map_id !== "Unknown")
+      .sort((a, b) => parseInt(b.matches) - parseInt(a.matches))
+      .slice(0,8)
+      .map(maps => ({
+        mapID: maps.map_id,
+        Matches: parseInt(maps.matches)
+      }))
+    : [];
+
   const kdaAreaData = !loading && matchHistoryData?.match_history ? 
     matchHistoryData.match_history.reverse().map((match, index) => {
       const perf = match?.player_performance || {};
@@ -44,6 +57,13 @@ function Player() {
     data: heroChartData,
     colors: {
       "Win Rate": "gray.300" 
+    }
+  });
+
+  const mapChart = useChart({
+    data: mapChartData,
+    colors: {
+      "Play Count": "gray.300"
     }
   });
   
@@ -196,7 +216,7 @@ function Player() {
                       tick={{ fill: heroChart.color("gray.300") }}
                     />
                     <PolarRadiusAxis 
-                      angle={0} 
+                      angle={90} 
                       domain={[0, 100]} 
                       tick={{ fill: heroChart.color("gray.300") }}
                       tickFormatter={(value) => `${value}%`}
@@ -247,6 +267,21 @@ function Player() {
                     />
                   </AreaChart>
                 </Chart.Root>
+              </Card.Root>
+            )}
+          </HStack>
+
+          <HStack maxW="full" w="100%" maxH="full" h="100%">
+            {mapChartData.length > 0 && (
+              <Card.Root w="full" p={4} rounded="3xl" maxH="full" h="375px">
+                <Text fontSize="md" fontWeight="bold" mb={4}>Map Play Count</Text>
+                    <BarSegment.Root chart={mapChart}>
+                    <BarSegment.Content>
+                      <BarSegment.Value />
+                      <BarSegment.Bar />
+                      <BarSegment.Label />
+                    </BarSegment.Content>
+                  </BarSegment.Root>
               </Card.Root>
             )}
           </HStack>
