@@ -51,10 +51,10 @@ VITE_MARVEL_RIVALS_API_KEY=YOUR_API_KEY
 - User authentication implementation so login/signup page works with protected profile page
 - BCrypt encrypted passwords
 - Player search so users can search up any player's stats with a username
+- Graphs to showcase user a visually represented data
 
 ## Future Work
 - Move API hooks from front end to proxy calls in back end?
-- Add graphs to showcase user a visually represented data
 - Finish player statistic page
 
 ## Known Issues
