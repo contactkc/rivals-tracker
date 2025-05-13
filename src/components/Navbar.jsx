@@ -42,7 +42,11 @@ function Navbar() {
                  Match History
                </Link>
            )}
-        
+          {user && user.marvelRivalsUsername && (
+               <Link href={`/player/${user.marvelRivalsUsername}`} color="gray.400" fontSize="sm" _hover={{ color: 'white', textDecoration: 'none' }} _focus={{ outline: 'none', boxShadow: 'none' }}>
+                 My Stats
+               </Link>
+           )}
         </Flex>
 
         {/* auth links */}
