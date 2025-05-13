@@ -7,53 +7,14 @@ import { Chart, useChart } from "@chakra-ui/charts";
 import { Bar, BarChart, Area, AreaChart, XAxis, YAxis, CartesianGrid, Legend, Tooltip, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts";
 import Navbar from '@/components/Navbar';
 
+
 function Player() {
   const { username } = useParams();
   const { data, loading, error } = useApi(`player/${username}`);
   const { data: matchHistoryData } = useApi(username ? `player/${username}/match-history` : null);
+  const [chartMode, setChartMode] = useState('winRate'); // 'winRate' or 'matches'
   
-  const heroChartData = !loading && data?.hero_matchups ? 
-    data.hero_matchups
-      .filter(hero => hero.hero_id && hero.hero_name !== "Unknown")
-      .sort((a, b) => parseFloat(b.win_rate) - parseFloat(a.win_rate))
-      .slice(0, 5)
-      .map(hero => ({
-        name: formatHeroName(hero.hero_name),
-        "Win Rate": parseFloat(hero.win_rate || 0),
-        Matches: hero.matches
-      }))
-    : [];
-  
-  const kdaAreaData = !loading && matchHistoryData?.match_history ? 
-    matchHistoryData.match_history.reverse().map((match, index) => {
-      const perf = match?.player_performance || {};
-      const kda = perf.deaths > 0 ? 
-        ((perf.kills || 0) + (perf.assists || 0)) / (perf.deaths || 1) : 
-        (perf.kills || 0) + (perf.assists || 0);
-      
-      return {
-        match: `Match ${index + 1}`,
-        KDA: parseFloat(kda.toFixed(2)),
-        hero: formatHeroName(perf?.hero_name || 'Unknown')
-      };
-    })
-    : [];
-  
-  // chart hooks with their respective data
-  const heroChart = useChart({
-    data: heroChartData,
-    colors: {
-      "Win Rate": "gray.300" 
-    }
-  });
-  
-  const kdaAreaChart = useChart({
-    data: kdaAreaData,
-    colors: {
-      "KDA": "gray.400"
-    }
-  });
-  
+  // helper function to format hero names
   function formatHeroName(name) {
     if (!name) return 'Unknown Hero';
     return name
@@ -70,6 +31,107 @@ function Player() {
       )
       .join(' ');
   }
+
+  function getCombinedHeroData() {
+    if (!data || !data.heroes_ranked || !data.heroes_unranked) return [];
+    
+    // map to combine heroes from ranked and unranked modes
+    const heroesMap = new Map();
+    
+    // process the ranked heroes
+    data.heroes_ranked.forEach(hero => {
+      if (hero.hero_id && hero.hero_name !== "Unknown") {
+        heroesMap.set(hero.hero_id, {
+          name: formatHeroName(hero.hero_name),
+          matches: hero.matches || 0,
+          wins: hero.wins || 0
+        });
+      }
+    });
+    
+    // add or update with unranked heroes
+    data.heroes_unranked.forEach(hero => {
+      if (hero.hero_id && hero.hero_name !== "Unknown") {
+        const existing = heroesMap.get(hero.hero_id);
+        if (existing) {
+          heroesMap.set(hero.hero_id, {
+            ...existing,
+            matches: existing.matches + (hero.matches || 0),
+            wins: existing.wins + (hero.wins || 0)
+          });
+        } else {
+          heroesMap.set(hero.hero_id, {
+            name: formatHeroName(hero.hero_name),
+            matches: hero.matches || 0,
+            wins: hero.wins || 0
+          });
+        }
+      }
+    });
+    
+    // win rate calculation
+    return Array.from(heroesMap.values())
+      .filter(hero => hero.matches > 0)
+      .map(hero => ({
+        name: hero.name,
+        matches: hero.matches,
+        winRate: hero.matches > 0 ? (hero.wins / hero.matches * 100) : 0
+      }));
+  }
+  
+  const combinedHeroes = !loading ? getCombinedHeroData() : [];
+
+  const heroWinRateData = combinedHeroes
+    .filter(hero => hero.matches >= 3)
+    .sort((a, b) => b.winRate - a.winRate)
+    .map(hero => ({
+      name: hero.name,
+      "Win Rate": parseFloat(hero.winRate.toFixed(2))
+    }));
+
+  const heroMatchesData = combinedHeroes
+    .sort((a, b) => b.matches - a.matches)
+    .map(hero => ({
+      name: hero.name,
+      Matches: hero.matches
+    }));
+  
+  const kdaAreaData = !loading && matchHistoryData?.match_history ? 
+    matchHistoryData.match_history.reverse().map((match, index) => {
+      const perf = match?.player_performance || {};
+      const kda = perf.deaths > 0 ? 
+        ((perf.kills || 0) + (perf.assists || 0)) / (perf.deaths || 1) : 
+        (perf.kills || 0) + (perf.assists || 0);
+      
+      return {
+        match: `Match ${index + 1}`,
+        KDA: parseFloat(kda.toFixed(2)),
+        hero: formatHeroName(perf?.hero_name || 'Unknown')
+      };
+    })
+    : [];
+  
+  // chart hooks
+  const heroWinRateChart = useChart({
+    data: heroWinRateData,
+    colors: {
+      "Win Rate": "gray.400" 
+    }
+  });
+  
+  const heroMatchesChart = useChart({
+    data: heroMatchesData,
+    colors: {
+      "Matches": "gray.400"
+    }
+  });
+  
+  const kdaAreaChart = useChart({
+    data: kdaAreaData,
+    colors: {
+      "KDA": "gray.400"
+    }
+  });
 
   if (loading) return(
     <Box position="relative" height="100vh">
@@ -194,34 +256,104 @@ function Player() {
           </HStack>
 
           <HStack maxW="full" w="100%" maxH="full" h="100%">
-            {heroChartData.length > 0 && (
+            {(heroWinRateData.length > 0 || heroMatchesData.length > 0) && (
               <Card.Root w="full" p={4} rounded="3xl" maxH="full" h="375px">
-                <Text fontSize="md" fontWeight="bold" mb={4}>Top Heroes by Win Rate</Text>
-                <Chart.Root h="350px" chart={heroChart}>
-                  <RadarChart data={heroChart.data} outerRadius="70%">
-                    <PolarGrid stroke={heroChart.color("gray.800")} />
-                    <PolarAngleAxis 
-                      dataKey={heroChart.key("name")} 
-                      tick={{ fill: heroChart.color("gray.300") }}
-                    />
-                    <PolarRadiusAxis 
-                      angle={0} 
-                      domain={[0, 100]} 
-                      tick={{ fill: heroChart.color("gray.300") }}
-                      tickFormatter={(value) => `${value}%`}
-                    />
-                    <Radar 
-                      dataKey={heroChart.key("Win Rate")} 
-                      stroke={heroChart.color("gray.300")} 
-                      fill={heroChart.color("gray.300")} 
-                      fillOpacity={0.3} 
-                    />
-                    <Tooltip 
-                      contentStyle={{ backgroundColor: "black", borderColor: "bg.muted", color: "white" }}
-                      formatter={(value) => [`${value.toFixed(2)}%`, "Win Rate"]}
-                    />
-                  </RadarChart>
-                </Chart.Root>
+                <HStack justify="space-between" mb={4}>
+                  <Text fontSize="md" fontWeight="bold">
+                    {chartMode === 'winRate' ? 'Top Heroes by Win Rate' : 'Most Played Heroes'}
+                  </Text>
+                  
+                  <HStack 
+                    spacing={1} 
+                    bg="gray.900" 
+                    rounded="full" 
+                    p={1} 
+                    borderWidth="1px" 
+                    borderColor="gray.800"
+                  >
+                    <Box
+                      px={3}
+                      py={1}
+                      cursor="pointer"
+                      rounded="full"
+                      fontSize="sm"
+                      bg={chartMode === 'winRate' ? 'gray.700' : 'transparent'}
+                      color={chartMode === 'winRate' ? 'white' : 'gray.400'}
+                      onClick={() => setChartMode('winRate')}
+                      transition="all 0.2s"
+                    >
+                      Win Rate
+                    </Box>
+                    <Box
+                      px={3}
+                      py={1}
+                      cursor="pointer"
+                      rounded="full"
+                      fontSize="sm"
+                      bg={chartMode === 'matches' ? 'gray.700' : 'transparent'}
+                      color={chartMode === 'matches' ? 'white' : 'gray.400'}
+                      onClick={() => setChartMode('matches')}
+                      transition="all 0.2s"
+                    >
+                      Matches
+                    </Box>
+                  </HStack>
+                </HStack>
+                
+                {chartMode === 'winRate' && heroWinRateData.length > 0 ? (
+                  <Chart.Root h="300px" chart={heroWinRateChart}>
+                    <RadarChart data={heroWinRateChart.data} outerRadius="70%">
+                      <PolarGrid stroke={heroWinRateChart.color("gray.800")} />
+                      <PolarAngleAxis 
+                        dataKey={heroWinRateChart.key("name")} 
+                        tick={{ fill: heroWinRateChart.color("gray.300") }}
+                      />
+                      <PolarRadiusAxis 
+                        angle={0} 
+                        domain={[0, 100]} 
+                        tick={{ fill: heroWinRateChart.color("gray.300") }}
+                        tickFormatter={(value) => `${value}%`}
+                      />
+                      <Radar 
+                        dataKey={heroWinRateChart.key("Win Rate")} 
+                        stroke={heroWinRateChart.color("gray.300")} 
+                        fill={heroWinRateChart.color("gray.300")} 
+                        fillOpacity={0.3} 
+                      />
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: "black", borderColor: "bg.muted", color: "white" }}
+                        formatter={(value) => [`${value.toFixed(2)}%`, "Win Rate"]}
+                      />
+                    </RadarChart>
+                  </Chart.Root>
+                ) : heroMatchesData.length > 0 ? (
+                  <Chart.Root h="300px" chart={heroMatchesChart}>
+                    <RadarChart data={heroMatchesChart.data} outerRadius="70%">
+                      <PolarGrid stroke={heroMatchesChart.color("gray.800")} />
+                      <PolarAngleAxis 
+                        dataKey={heroMatchesChart.key("name")} 
+                        tick={{ fill: heroMatchesChart.color("gray.300") }}
+                      />
+                      <PolarRadiusAxis 
+                        angle={0} 
+                        domain={[0, Math.max(...heroMatchesData.map(d => d.Matches)) + 5]} 
+                        tick={{ fill: heroMatchesChart.color("gray.300") }}
+                      />
+                      <Radar 
+                        dataKey={heroMatchesChart.key("Matches")} 
+                        stroke={heroMatchesChart.color("gray.300")} 
+                        fill={heroMatchesChart.color("gray.300")} 
+                        fillOpacity={0.3} 
+                      />
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: "black", borderColor: "bg.muted", color: "white" }}
+                        formatter={(value) => [value, "Matches"]}
+                      />
+                    </RadarChart>
+                  </Chart.Root>
+                ) : (
+                  <Text color="gray.500" textAlign="center" mt={8}>No hero data available</Text>
+                )}
               </Card.Root>
             )}
             
