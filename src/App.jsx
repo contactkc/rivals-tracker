@@ -40,7 +40,7 @@ function App() {
                   <Input
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search player here"
+                    placeholder="Search player or UID here"
                     bg="gray.800"
                     border="none"
                     rounded="2xl"
