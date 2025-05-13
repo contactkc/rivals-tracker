@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import useApi from '../hooks/useApi';
 import { Box, Text, Spinner, Alert, AbsoluteCenter, 
-  VStack, Image, Card, HStack, Avatar, Heading, SimpleGrid } from '@chakra-ui/react';
+  VStack, Image, Card, HStack, Avatar, Heading, SimpleGrid, Badge, Tag } from '@chakra-ui/react';
 import { Chart, useChart } from "@chakra-ui/charts";
 import { Bar, BarChart, Area, AreaChart, XAxis, YAxis, CartesianGrid, Legend, Tooltip, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts";
 import Navbar from '@/components/Navbar';
@@ -136,9 +136,15 @@ function Player() {
                           <Avatar.Image src={`http://marvelrivalsapi.com/rivals${data.player.icon.player_icon}`} alt="Player Icon" />
                           <Avatar.Fallback name={data.player.name} />
                       </Avatar.Root>
-                      <Text fontSize="2xl" fontWeight="bold">{data.player.name}</Text>
+                      <HStack spacing={2} alignItems="center">
+                        <Text fontSize="2xl" fontWeight="bold">{data.player.name}</Text>
+                        {data.player?.rank?.image && (<Image src={`http://marvelrivalsapi.com/rivals${data.player.rank.image}`} alt={`${data.player.rank.rank} Rank Icon`} height="30px" />)}
+                      </HStack>
                       <Text fontSize="xs" fontStyle="italic" color="gray.400">UID: {data.player.uid}</Text>
                       <Text fontSize="lg" color="gray.400">Level: {data.player.level}</Text>
+                      <Tag.Root>
+                        <Tag.Label>Rank: {data.player?.rank?.rank === "Invalid level" ? 'Unranked' : data.player?.rank?.rank}</Tag.Label>
+                      </Tag.Root>
                   </VStack>
               </Card.Body>
             </Card.Root>
