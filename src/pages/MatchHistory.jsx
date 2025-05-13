@@ -52,8 +52,8 @@ function MatchHistory() {
                 <Navbar />
                 <AbsoluteCenter>
                     <VStack spacing={4}>
-                        <Spinner size="lg" color="blue.500" thickness="4px" />
-                        <Text fontSize="xl" color="gray.500">Loading match history for {marvelUsername}...</Text>
+                        <Spinner size="md" />
+                        <Text color="white">Loading match history for {marvelUsername}...</Text>
                     </VStack>
                 </AbsoluteCenter>
             </Box>
@@ -65,9 +65,7 @@ function MatchHistory() {
             <Box textAlign="center" py={10} px={6}>
                 <Navbar />
                 <Alert status="error" variant="solid" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
-                    <Heading as="h2" size="xl" mt={6} mb={2}>
-                        Error Loading Match History
-                    </Heading>
+                    <Text fontSize="xl" fontWeight="600">Error Loding Match History</Text>
                     <Text>{error}</Text>
                 </Alert>
             </Box>
@@ -78,9 +76,7 @@ function MatchHistory() {
          return (
             <Box textAlign="center" py={10} px={6}>
                 <Navbar />
-                <Heading as="h2" size="xl" mt={6} mb={2}>
-                    No Match History Found
-                </Heading>
+                <Text fontSize="xl" fontWeight="600">No Match History Found</Text>
                 <Text color="gray.500">No match history available for "{marvelUsername}".</Text>
             </Box>
         );
