@@ -16,6 +16,8 @@ import {
     CardBody,
     SimpleGrid,
 } from '@chakra-ui/react';
+import { Chart, useChart } from "@chakra-ui/charts";
+import { Bar, BarChart, XAxis, YAxis, CartesianGrid, Legend, Tooltip } from "recharts";
 
 import Navbar from '../components/Navbar';
 
@@ -46,6 +48,27 @@ function MatchHistory() {
     const { maps: AllMaps } = useMaps();
 
     const matchHistory = matchHistoryData?.match_history;
+    
+    const recentMatches = matchHistory?.slice(0, 5).reverse() || [];
+    const kdaChartData = recentMatches.map((match, index) => {
+        const perf = match.player_performance;
+        return {
+            match: `Match ${recentMatches.length - index}`,
+            Kills: perf?.kills || 0,
+            Deaths: perf?.deaths || 0,
+            Assists: perf?.assists || 0,
+            hero: formatHeroName(perf?.hero_name || 'Unknown')
+        };
+    });
+    
+    const kdaChart = useChart({
+        data: kdaChartData,
+        colors: {
+            "Kills": "white",
+            "Deaths": "white", 
+            "Assists": "white"
+        }
+    });
 
     const getMapImageUrl = (map_id) => {
         const found = AllMaps.find((m) => Number(m.map_id) === Number(map_id));
@@ -132,6 +155,36 @@ function MatchHistory() {
             <VStack spacing={8} mt={8} maxW="container.lg" mx="auto">
 
                 <Text fontSize="xl" fontWeight="600">Match History for {marvelUsername}</Text>
+                
+                {kdaChartData.length > 0 && (
+                    <Card.Root w="full" p={4} rounded="3xl">
+                        <Text fontSize="md" fontWeight="bold" mb={4}>Recent Match Performance</Text>
+                        <Chart.Root h="300px" chart={kdaChart}>
+                            <BarChart data={kdaChart.data}>
+                                <CartesianGrid strokeDasharray="3 3" stroke={kdaChart.color("gray.800")} />
+                                <XAxis 
+                                    dataKey={kdaChart.key("match")} 
+                                    axisLine={{ stroke: kdaChart.color("gray.800") }}
+                                    tick={{ fill: kdaChart.color("gray.800") }}
+                                />
+                                <YAxis 
+                                    axisLine={{ stroke: kdaChart.color("gray.800") }}
+                                    tick={{ fill: kdaChart.color("gray.800") }}
+                                />
+                                <Tooltip 
+                                    cursor={{ fill: kdaChart.color("gray.900") }}
+                                    contentStyle={{ backgroundColor: "black", borderColor: "bg.muted", color: "white" }}
+                                    labelStyle={{ fontWeight: "bold" }}
+                                    formatter={(value, name, props) => [`${value}`, `${name} (${props.payload.hero})`]}
+                                />
+                                <Legend />
+                                <Bar dataKey={kdaChart.key("Kills")} fill={kdaChart.color("gray.300")} />
+                                <Bar dataKey={kdaChart.key("Deaths")} fill={kdaChart.color("gray.400")} />
+                                <Bar dataKey={kdaChart.key("Assists")} fill={kdaChart.color("gray.500")} />
+                            </BarChart>
+                        </Chart.Root>
+                    </Card.Root>
+                )}
 
                 <Box w="full">
 
