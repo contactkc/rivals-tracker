@@ -49,7 +49,7 @@ function useMaps() {
             : 'https://marvelrivalsapi.com/rivals/maps/large/map_1032.png';
 
           return {
-            map_id: map.map_id,
+            map_id: map.id,
             name: map.name,
             location: map.location,
             description: map.description || 'No description provided...',
