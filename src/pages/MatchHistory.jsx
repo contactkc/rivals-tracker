@@ -19,6 +19,23 @@ import {
 
 import Navbar from '../components/Navbar';
 
+function formatHeroName(name) {
+    if (!name) return 'Unknown Hero';
+    return name
+        .split(' ')
+        .map(word =>
+        word
+            .split(/([&-])/g)
+            .map(part =>
+            part.match(/[a-zA-Z]/)
+                ? part.charAt(0).toUpperCase() + part.slice(1)
+                : part
+            )
+            .join('')
+        )
+        .join(' ');
+}
+
 function MatchHistory() {
     const { user } = useUser();
     const marvelUsername = user?.marvelRivalsUsername;
@@ -145,7 +162,7 @@ function MatchHistory() {
                                             <Avatar.Root size="2xl">
                                                 <Avatar.Image src={`http://marvelrivalsapi.com/rivals${perf.hero_type}`} alt={`${perf?.hero_name}'s picture`} />
                                             </Avatar.Root>
-                                          <Text fontWeight="bold">{perf?.hero_name || 'Unknown Hero'}</Text>
+                                          <Text fontWeight="bold">{formatHeroName(perf?.hero_name)}</Text>
                                           <HStack spacing={2}>
                                             <Text>K:{perf?.kills ?? 0}</Text>
                                             <Text>D:{perf?.deaths ?? 0}</Text>
