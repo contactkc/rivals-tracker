@@ -61,8 +61,7 @@ public class ApiProxyController {
 
     @GetMapping("/player/{username}/match-history")
     public ResponseEntity<?> getPlayerMatchHistory(@PathVariable String username) {
-        String externalMatchHistoryUrl = API_BASE_URL + "find-player/" + username;
-        
+        String externalMatchHistoryUrl = API_BASE_URL + "player/" + username;
         HttpEntity<String> entity = createRequestEntity();
 
         try {
@@ -72,12 +71,9 @@ public class ApiProxyController {
                 entity,
                 String.class
             );
-            
-            // parse JSON response before returning it
+
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(response.getBody());
-            
-            // return the parsed JSON
             return ResponseEntity.status(response.getStatusCode()).body(jsonNode);
 
         } catch (HttpClientErrorException e) {
