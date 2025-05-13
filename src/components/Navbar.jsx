@@ -54,7 +54,7 @@ function Navbar() {
           {user ? (
             <>
               <Text fontSize="sm" color="white">
-                Welcome, <Link href={`/profile/${user.id}`} _focus={{ outline: 'none', boxShadow: 'none' }}>{user.username} <FaCaretDown /></Link>
+                Welcome, <Link href={`/profile/${user.id}`} _focus={{ outline: 'none', boxShadow: 'none', }} _hover={{ color: 'white' }}>{user.username} <FaCaretDown /></Link>
               </Text>
               <Button onClick={logout} size="sm" variant="outline" rounded="3xl" >
                 <LuDoorOpen />
