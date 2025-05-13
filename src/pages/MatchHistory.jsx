@@ -17,7 +17,7 @@ import {
     SimpleGrid,
 } from '@chakra-ui/react';
 import { Chart, useChart } from "@chakra-ui/charts";
-import { Bar, BarChart, XAxis, YAxis, CartesianGrid, Legend, Tooltip } from "recharts";
+import { Bar, BarChart, Area, AreaChart, XAxis, YAxis, CartesianGrid, Legend, Tooltip } from "recharts";
 
 import Navbar from '../components/Navbar';
 
@@ -49,11 +49,11 @@ function MatchHistory() {
 
     const matchHistory = matchHistoryData?.match_history;
     
-    const recentMatches = matchHistory?.slice(0, 5).reverse() || [];
+    const recentMatches = matchHistory? [...matchHistory].reverse() : [];
     const kdaChartData = recentMatches.map((match, index) => {
         const perf = match.player_performance;
         return {
-            match: `Match ${recentMatches.length - index}`,
+            match: `Match ${index + 1}`,
             Kills: perf?.kills || 0,
             Deaths: perf?.deaths || 0,
             Assists: perf?.assists || 0,
@@ -158,9 +158,9 @@ function MatchHistory() {
                 
                 {kdaChartData.length > 0 && (
                     <Card.Root maxW="5xl" w="full" p={4} rounded="3xl">
-                        <Text fontSize="md" fontWeight="bold" mb={4}>Recent Match Performance</Text>
+                        <Text fontSize="md" fontWeight="bold" mb={4}>Recent Match Performance Trend</Text>
                         <Chart.Root h="300px" chart={kdaChart}>
-                            <BarChart data={kdaChart.data}>
+                            <AreaChart data={kdaChart.data}>
                                 <CartesianGrid strokeDasharray="3 3" stroke={kdaChart.color("gray.800")} />
                                 <XAxis 
                                     dataKey={kdaChart.key("match")} 
@@ -178,10 +178,31 @@ function MatchHistory() {
                                     formatter={(value, name, props) => [`${value}`, `${name} (${props.payload.hero})`]}
                                 />
                                 <Legend />
-                                <Bar dataKey={kdaChart.key("Kills")} fill={kdaChart.color("gray.300")} />
-                                <Bar dataKey={kdaChart.key("Deaths")} fill={kdaChart.color("gray.400")} />
-                                <Bar dataKey={kdaChart.key("Assists")} fill={kdaChart.color("gray.500")} />
-                            </BarChart>
+                                <Area 
+                                    type="monotone" 
+                                    dataKey={kdaChart.key("Kills")} 
+                                    stroke={kdaChart.color("gray.300")} 
+                                    fill={kdaChart.color("gray.300")} 
+                                    fillOpacity={0.3}
+                                    stackId="1"
+                                />
+                                <Area 
+                                    type="monotone" 
+                                    dataKey={kdaChart.key("Deaths")} 
+                                    stroke={kdaChart.color("gray.400")} 
+                                    fill={kdaChart.color("gray.400")} 
+                                    fillOpacity={0.3}
+                                    stackId="2"
+                                />
+                                <Area 
+                                    type="monotone" 
+                                    dataKey={kdaChart.key("Assists")} 
+                                    stroke={kdaChart.color("gray.500")} 
+                                    fill={kdaChart.color("gray.500")} 
+                                    fillOpacity={0.3}
+                                    stackId="3"
+                                />
+                            </AreaChart>
                         </Chart.Root>
                     </Card.Root>
                 )}
