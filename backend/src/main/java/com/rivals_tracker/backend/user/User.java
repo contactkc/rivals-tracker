@@ -18,7 +18,7 @@ public class User {
     @Column(nullable = false) // Password cannot be null
     private String password; // Remember to hash this in a real app!
 
-    @Column(unique = true) // Marvel Rivals username should be unique (optional, depends on requirements)
+    @Column()
     private String marvelRivalsUsername; // Field to store the game username
 
     @Column
