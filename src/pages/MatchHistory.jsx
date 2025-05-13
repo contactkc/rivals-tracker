@@ -36,9 +36,7 @@ function MatchHistory() {
         return (
             <Box textAlign="center" py={10} px={6}>
                 <Navbar />
-                <Heading as="h2" size="xl" mt={6} mb={2}>
-                    Marvel Rivals Username Required
-                </Heading>
+                <Text fontSize="xl" fontWeight="600">Marvel Rivals Username Required</Text>
                 <Text color="gray.500">
                     Please save your Marvel Rivals username on your profile page to view match history.
                 </Text>
@@ -92,9 +90,7 @@ function MatchHistory() {
 
             <VStack spacing={8} mt={8} maxW="container.lg" mx="auto">
 
-                <Heading size="lg" textAlign="center">
-                    Match History for {marvelUsername}
-                </Heading>
+                <Text fontSize="xl" fontWeight="600">Match History for {marvelUsername}</Text>
 
                 <Box w="full">
 
