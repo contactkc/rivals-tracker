@@ -11,7 +11,7 @@ Track your Marvel Rivals stats or anyone you want with their username! This proj
   - Backend: CORS, API, Database, User Auth
   
 - Alexander Leang
-  - Backend: Database, API
+  - Backend: UI/UX, Database, API
 
 ## Techstack
 
@@ -23,25 +23,53 @@ Track your Marvel Rivals stats or anyone you want with their username! This proj
 
 **API:** [MarvelRivalsAPI](https://marvelrivalsapi.com/)
 
-## How to Use:
+## How to Use (Local deploy):
+
+### Prerequisites:
+
+- Java 21 / 23. Java version can be changed under `backend/pom.xml`.
+- A PostgreSQL server. Installation and instructions for [Windows][1], [Mac][2], or [Linux][3]
+
+[1]: https://www.w3schools.com/postgresql/postgresql_install.php
+[2]: https://postgresapp.com/
+[3]: https://www.postgresql.org/download/linux/
 
 1. Clone the repository:
-```
+```sh
 git clone https://github.com/contactkc/rivals-tracker.git
 ```
 2. Navigate to the project directory:
-```
+```sh
 cd rivals-tracker
 ```
 3. Install npm dependencies
-```
+```sh
 npm install
 ```
-4. Make your environmental file (.env)
+4. Create environment files (.env)
+```sh
+cp .env.example .env;  \
+cp backend/.env.example backend/.env;  \
+cp backend/src/main/resources/application.properties.example backend/src/main/resources/application.properties
 ```
-Add your key inside the env in this format:
-VITE_MARVEL_RIVALS_API_KEY=YOUR_API_KEY
+
+Add your API key inside the newly created files. For `application.properties`, paste the key in the `jwt.secret=` property.
+
+5. Create a PostgreSQL user `postgres` with the password `passwordhere` (can be modified in `application.properties`)
+
+	Then, create a new database:
+```sql
+postgres=# CREATE DATABASE marvelrivalsdb OWNER postgres;
 ```
+
+6. Run:
+```sh
+npm run dev
+```
+
+and run `backend/src/main/BackendApplication.java` in an IDE or Spring Boot application.
+
+Default address for the app is `http://localhost:5173/`.
 
 ## Features Implemented
 - Minimalistic Front End website
