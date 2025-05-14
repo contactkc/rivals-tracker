@@ -3,6 +3,8 @@ Track your Marvel Rivals stats or anyone you want with their username! This proj
 
 ### [Demo](https://www.youtube.com/watch?v=Kz-kSrTUs_A)
 
+### [Presentation slides](https://docs.google.com/presentation/d/1x_iP5DaEsTTnMZR7O1yuPATdeVkGltJm/edit?usp=sharing&ouid=114937550575431131208&rtpof=true&sd=true)
+
 ## Team Members & Roles
 
 - Benjamin Nguyen
