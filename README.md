@@ -1,6 +1,8 @@
 # Rivals Tracker
 Track your Marvel Rivals stats or anyone you want with their username! This project aims to develop a website that collects, processes, and visualizes player data from a video game. The system will leverage Object-Oriented Programming (OOP) principles to ensure modularity, reusability, and maintainability. The program will support user authentication (if needed), data retrieval from APIs or databases, data processing, and interactive visual representation of player statistics. The goal is to provide an intuitive and insightful way to analyze player performance, trends, and achievements.
 
+### [Demo](https://www.youtube.com/watch?v=Kz-kSrTUs_A)
+
 ## Team Members & Roles
 
 - Benjamin Nguyen
@@ -23,7 +25,7 @@ Track your Marvel Rivals stats or anyone you want with their username! This proj
 
 **API:** [MarvelRivalsAPI](https://marvelrivalsapi.com/)
 
-## How to Use (Local deploy):
+## How to Use (Local Deploy):
 
 ### Prerequisites:
 
